@@ -1,0 +1,3695 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>APLD Analytics Pipeline — UC Market Understanding — KMK</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+    @import "tailwindcss";
+
+    :root {
+      --primary: #0F6D8E;
+      --primary-dark: #0A4F68;
+      --primary-light: #1A8AAF;
+      --accent: #E8913A;
+      --accent-dark: #D07A2B;
+      --accent-light: #F0A856;
+      --surface: #F5F7FA;
+      --card: #FFFFFF;
+      --border: #E2E8F0;
+      --border-light: #EDF2F7;
+      --text-primary: #1A2332;
+      --text-secondary: #4A5568;
+      --text-muted: #A0AEC0;
+      --success: #2D8A56;
+      --success-light: #38A169;
+      --danger: #C53030;
+      --background: #F5F7FA;
+      --foreground: #1A2332;
+    }
+
+    :root {
+      color-scheme: light;
+      --navy-950: var(--primary-dark);
+      --navy-900: var(--primary-dark);
+      --navy-800: var(--primary);
+      --navy-700: var(--primary);
+      --navy-600: var(--primary-light);
+      --teal-700: var(--accent-dark);
+      --teal-600: var(--accent);
+      --teal-500: var(--accent-light);
+      --teal-100: #fff1e6;
+      --teal-050: #fff8f0;
+      --surface: var(--card);
+      --page: var(--background);
+      --ink-primary: var(--text-primary);
+      --ink-secondary: var(--text-secondary);
+      --ink-muted: var(--text-muted);
+      --grid: var(--border-light);
+      --baseline: var(--border);
+      --border: var(--border);
+      --border-strong: #cbd5e1;
+      --good: var(--success);
+      --good-text: #226640;
+      --warning: #eab308;
+      --serious: #ec835a;
+      --critical: var(--danger);
+      --series-1: #2a78d6;
+      --series-2: #eb6834;
+      --series-3: #1baf7a;
+      --series-4: #eda100;
+      --series-5: #e87ba4;
+      --series-6: #008300;
+      --series-7: #4a3aa7;
+      --series-8: #e34948;
+      --seq-250: #86b6ef;
+      --seq-300: #6da7ec;
+      --seq-350: #5598e7;
+      --seq-400: #3987e5;
+      --seq-450: #2a78d6;
+      --seq-500: #256abf;
+      --seq-550: #1c5cab;
+      --seq-600: #184f95;
+      --shadow-sm: var(--shadow-subtle);
+      --shadow-md: var(--shadow-elevated);
+      --radius: 12px;
+    }
+
+    @theme inline {
+      --color-background: var(--background);
+      --color-foreground: var(--foreground);
+      --color-primary: var(--primary);
+      --color-primary-dark: var(--primary-dark);
+      --color-primary-light: var(--primary-light);
+      --color-accent: var(--accent);
+      --color-accent-dark: var(--accent-dark);
+      --color-accent-light: var(--accent-light);
+      --color-surface: var(--surface);
+      --color-card: var(--card);
+      --color-border: var(--border);
+      --color-border-light: var(--border-light);
+      --color-text-primary: var(--text-primary);
+      --color-text-secondary: var(--text-secondary);
+      --color-text-muted: var(--text-muted);
+      --color-success: var(--success);
+      --color-success-light: var(--success-light);
+      --color-danger: var(--danger);
+      --font-sans: 'Inter', system-ui, sans-serif;
+
+      --shadow-subtle: 0 2px 10px -3px rgba(15, 109, 142, 0.05);
+      --shadow-elevated: 0 4px 20px -5px rgba(15, 109, 142, 0.1);
+      --shadow-floating: 0 10px 30px -10px rgba(15, 109, 142, 0.15);
+    }
+
+    body {
+      background: var(--background);
+      color: var(--foreground);
+      font-family: 'Inter', system-ui, sans-serif;
+      height: 100%;
+    }
+
+    html {
+      height: 100%;
+    }
+
+    /* Animations */
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+
+      to {
+        opacity: 1;
+      }
+    }
+
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes slideDown {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes scaleIn {
+      from {
+        opacity: 0;
+        transform: scale(0.95);
+      }
+
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    @keyframes pulse-dot {
+
+      0%,
+      100% {
+        opacity: 0.4;
+      }
+
+      50% {
+        opacity: 1;
+      }
+    }
+
+    @keyframes shimmer {
+      0% {
+        background-position: -200% 0;
+      }
+
+      100% {
+        background-position: 200% 0;
+      }
+    }
+
+    @keyframes typing {
+      0% {
+        opacity: 0.3;
+      }
+
+      50% {
+        opacity: 1;
+      }
+
+      100% {
+        opacity: 0.3;
+      }
+    }
+
+    .animate-fade-in {
+      animation: fadeIn 0.4s ease-out;
+    }
+
+    .animate-slide-up {
+      animation: slideUp 0.5s ease-out;
+    }
+
+    .animate-slide-down {
+      animation: slideDown 0.3s ease-out;
+    }
+
+    .animate-scale-in {
+      animation: scaleIn 0.3s ease-out;
+    }
+
+    /* Scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: var(--surface);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--text-muted);
+      border-radius: 3px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--text-secondary);
+    }
+
+    /* Custom components */
+    .glass-panel {
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--border-light);
+    }
+
+    .typing-indicator span {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--primary);
+      animation: typing 1.4s infinite;
+    }
+
+    .typing-indicator span:nth-child(2) {
+      animation-delay: 0.2s;
+    }
+
+    .typing-indicator span:nth-child(3) {
+      animation-delay: 0.4s;
+    }
+
+
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
+
+
+    button {
+      font-family: inherit;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    a {
+      color: var(--teal-700);
+    }
+
+    /* ---------- Landing ---------- */
+    #view-landing {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      background: var(--page);
+      color: var(--foreground);
+    }
+
+    .landing-nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 40px;
+    }
+
+    .brand-lockup {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      cursor: pointer;
+    }
+
+    .brand-mark {
+      width: 38px;
+      height: 38px;
+      border-radius: 9px;
+      background: linear-gradient(135deg, var(--teal-500), var(--teal-700));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 14px;
+      letter-spacing: 0.5px;
+      color: #fff;
+      box-shadow: var(--shadow-md);
+    }
+
+    .brand-text {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.1;
+    }
+
+    .brand-text b {
+      font-size: 15px;
+      letter-spacing: 0.3px;
+    }
+
+    .brand-text span {
+      font-size: 11px;
+      color: rgba(255, 255, 255, 0.6);
+      letter-spacing: 0.6px;
+      text-transform: uppercase;
+    }
+
+    .landing-nav-links {
+      display: flex;
+      gap: 28px;
+      align-items: center;
+    }
+
+    .landing-nav-links a {
+      color: var(--ink-secondary);
+      text-decoration: none;
+      font-size: 14px;
+    }
+
+    .pill-tag {
+      font-size: 11px;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      background: var(--teal-100);
+      border: 1px solid var(--teal-600);
+      padding: 4px 10px;
+      border-radius: 999px;
+      color: var(--teal-700);
+    }
+
+    .landing-hero {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      padding: 10px 40px 60px;
+    }
+
+    .landing-hero-inner {
+      max-width: 1180px;
+      margin: 0 auto;
+      width: 100%;
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: 56px;
+      align-items: center;
+    }
+
+    .landing-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--teal-050);
+      border: 1px solid var(--teal-100);
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-size: 12.5px;
+      color: var(--teal-700);
+      margin-bottom: 22px;
+    }
+
+    .landing-eyebrow .dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--teal-500);
+      box-shadow: 0 0 0 3px rgba(18, 147, 159, 0.25);
+    }
+
+    .landing-hero h1 {
+      font-size: 46px;
+      line-height: 1.12;
+      margin: 0 0 18px;
+      font-weight: 750;
+      letter-spacing: -0.5px;
+      color: var(--navy-900);
+    }
+
+    .landing-hero h1 em {
+      font-style: normal;
+      color: var(--teal-600);
+    }
+
+    .landing-hero p.lead {
+      font-size: 17px;
+      line-height: 1.6;
+      color: var(--ink-secondary);
+      max-width: 540px;
+      margin: 0 0 30px;
+    }
+
+    .landing-cta-row {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .btn {
+      border: none;
+      cursor: pointer;
+      font-weight: 600;
+      border-radius: 10px;
+      padding: 13px 22px;
+      font-size: 14.5px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: transform .12s ease, box-shadow .12s ease, background .15s ease, opacity .15s ease;
+    }
+
+    .btn:active {
+      transform: translateY(1px);
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--teal-500), var(--teal-700));
+      color: #fff;
+      box-shadow: 0 8px 22px rgba(18, 147, 159, 0.35);
+    }
+
+    .btn-primary:hover {
+      box-shadow: 0 10px 26px rgba(18, 147, 159, 0.5);
+    }
+
+    .btn-secondary {
+      background: #fff;
+      color: var(--ink-primary);
+      border: 1px solid var(--border-strong);
+    }
+
+    .btn-secondary:hover {
+      background: var(--surface);
+    }
+
+    .btn-ghost {
+      background: transparent;
+      color: var(--teal-700);
+      padding: 10px 4px;
+    }
+
+    .btn-light {
+      background: #fff;
+      color: var(--navy-900);
+    }
+
+    .btn-light:hover {
+      background: #f1f4f7;
+    }
+
+    .btn:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+    }
+
+    .landing-modules {
+      display: flex;
+      gap: 10px;
+      margin-top: 34px;
+    }
+
+    .module-tile {
+      border: 1px solid var(--border);
+      background: var(--surface);
+      border-radius: 10px;
+      padding: 10px 14px;
+      font-size: 12.5px;
+      color: var(--ink-secondary);
+    }
+
+    .module-tile.active {
+      border-color: var(--teal-500);
+      background: var(--teal-050);
+      color: var(--teal-700);
+    }
+
+    .landing-visual {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 22px;
+      backdrop-filter: blur(6px);
+      box-shadow: var(--shadow-md);
+    }
+
+    .landing-visual .vwin-bar {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 14px;
+    }
+
+    .landing-visual .vwin-bar span {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: var(--border-strong);
+    }
+
+    .mini-chat-row {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 12px;
+      align-items: flex-start;
+    }
+
+    .mini-avatar {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: var(--teal-600);
+      flex: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .mini-bubble {
+      background: var(--page);
+      border: 1px solid var(--border);
+      padding: 10px 13px;
+      border-radius: 12px;
+      font-size: 12.5px;
+      color: var(--ink-primary);
+      line-height: 1.45;
+    }
+
+    .mini-bubble.me {
+      background: var(--teal-050);
+      margin-left: 36px;
+      border-color: var(--teal-100);
+    }
+
+    .mini-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .mini-stat {
+      background: var(--page);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 10px 12px;
+    }
+
+    .mini-stat b {
+      display: block;
+      font-size: 18px;
+      color: var(--ink-primary);
+    }
+
+    .mini-stat span {
+      font-size: 10.5px;
+      color: var(--ink-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+    }
+
+    .landing-foot {
+      padding: 16px 40px;
+      text-align: center;
+      font-size: 12px;
+      color: var(--ink-muted);
+    }
+
+    /* ---------- Explore shell ---------- */
+    #view-explore {
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+    }
+
+    .app-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 32px;
+      background: var(--surface);
+      color: var(--foreground);
+      flex: none;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .app-header .brand-lockup {
+      cursor: pointer;
+    }
+
+    .crumb {
+      font-size: 13px;
+      color: var(--ink-secondary);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-left: 6px;
+      padding-left: 14px;
+      border-left: 1px solid var(--border);
+    }
+
+    .crumb b {
+      color: var(--ink-primary);
+      font-weight: 600;
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .env-tag {
+      font-size: 10.5px;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      background: rgba(250, 178, 25, 0.18);
+      border: 1px solid rgba(250, 178, 25, 0.4);
+      color: #ffd88a;
+      padding: 3px 9px;
+      border-radius: 999px;
+    }
+
+    .avatar-badge {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background: var(--teal-600);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .stepper {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      padding: 14px 28px;
+      background: #fff;
+      border-bottom: 1px solid var(--border);
+      flex: none;
+      overflow-x: auto;
+    }
+
+    .step {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      color: var(--ink-muted);
+      font-size: 12.5px;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .step .dot {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: #eceef1;
+      border: 2px solid #dfe2e7;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      color: var(--ink-muted);
+      flex: none;
+    }
+
+    .step.done .dot {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: #fff;
+    }
+
+    .step.active .dot {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #fff;
+      box-shadow: 0 0 0 4px rgba(232, 145, 58, 0.12);
+    }
+
+    .step.active {
+      color: var(--accent);
+    }
+
+    .step.done {
+      color: var(--primary);
+    }
+
+    .step-line {
+      width: 34px;
+      height: 2px;
+      background: #dfe2e7;
+      margin: 0 6px;
+      flex: none;
+    }
+
+    .step-line.done {
+      background: var(--primary);
+    }
+
+    .sub-badges {
+      display: flex;
+      gap: 4px;
+      margin-left: 4px;
+    }
+
+    .sub-badge {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #dfe2e7;
+    }
+
+    .sub-badge.done {
+      background: var(--teal-600);
+    }
+
+    .explore-grid {
+      flex: 1;
+      display: grid;
+      grid-template-columns: 420px 1fr;
+      gap: 24px;
+      min-height: 0;
+      padding-right: 24px;
+      transition: grid-template-columns 0.25s ease;
+    }
+
+    .explore-grid.chat-collapsed {
+      grid-template-columns: 1fr;
+      padding-left: 24px;
+    }
+
+    /* ---- chat panel ---- */
+    #chat-panel {
+      border-right: 1px solid var(--border);
+      background: #f8fafc;
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+    }
+
+    #chat-panel.collapsed {
+      display: none !important;
+    }
+
+    .collapse-toggle-btn {
+      background: none;
+      border: none;
+      color: var(--ink-muted);
+      cursor: pointer;
+      padding: 6px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.15s, color 0.15s;
+    }
+
+    .collapse-toggle-btn:hover {
+      background: #f1f3f5;
+      color: var(--ink-primary);
+    }
+
+    .chat-expand-btn {
+      position: fixed;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 999;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--navy-900);
+      color: #fff;
+      border: 1px solid var(--border);
+      border-left: none;
+      padding: 12px 14px;
+      border-radius: 0 10px 10px 0;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 2px 0 10px rgba(0, 0, 0, 0.12);
+      transition: background 0.2s, padding-left 0.2s;
+    }
+
+    .chat-expand-btn:hover {
+      background: var(--teal-600);
+      padding-left: 18px;
+    }
+
+    .chat-expand-btn.hidden {
+      display: none !important;
+    }
+
+    .chat-head {
+      padding: 20px 24px;
+      border-bottom: 1px solid var(--border);
+      background: #fff;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .chat-head .ai-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 9px;
+      background: var(--primary-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .chat-head b {
+      font-size: 14px;
+      display: block;
+    }
+
+    .chat-head .status {
+      font-size: 11.5px;
+      color: var(--good-text);
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .chat-head .status .dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--good);
+    }
+
+    #chat-messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .msg {
+      display: flex;
+      gap: 9px;
+      max-width: 100%;
+    }
+
+    .msg-user {
+      justify-content: flex-end;
+    }
+
+    .avatar.user-avatar {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: rgba(232, 145, 58, 0.15);
+      flex: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10.5px;
+      font-weight: 700;
+      color: var(--accent-dark);
+    }
+
+    .avatar.ai-avatar {
+      width: 26px;
+      height: 26px;
+      border-radius: 8px;
+      background: var(--primary-light);
+      flex: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 9.5px;
+      font-weight: 800;
+      color: #fff;
+    }
+
+    .bubble {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+      border-radius: 12px;
+      border-top-left-radius: 4px;
+      padding: 10px 13px;
+      font-size: 13.5px;
+      line-height: 1.55;
+      color: var(--ink-primary);
+      max-width: 270px;
+    }
+
+    .msg-user .bubble {
+      background: var(--navy-900);
+      color: #fff;
+      border-radius: 12px;
+      border-top-right-radius: 4px;
+      border-top-left-radius: 12px;
+      max-width: 250px;
+    }
+
+    .bubble ul {
+      margin: 6px 0 0;
+      padding-left: 18px;
+    }
+
+    .bubble li {
+      margin-bottom: 4px;
+    }
+
+    .typing-bubble {
+      display: flex;
+      gap: 4px;
+      align-items: center;
+      padding: 13px 15px;
+    }
+
+    .typing-bubble span {
+      width: 6px;
+      height: 6px;
+      background: var(--ink-muted);
+      border-radius: 50%;
+      animation: blink 1.2s infinite;
+    }
+
+    .typing-bubble span:nth-child(2) {
+      animation-delay: .2s;
+    }
+
+    .typing-bubble span:nth-child(3) {
+      animation-delay: .4s;
+    }
+
+    @keyframes blink {
+
+      0%,
+      80%,
+      100% {
+        opacity: .25;
+        transform: translateY(0);
+      }
+
+      40% {
+        opacity: 1;
+        transform: translateY(-2px);
+      }
+    }
+
+    #chips-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      padding: 0 18px 12px;
+    }
+
+    .chip {
+      border: 1px solid var(--primary);
+      color: var(--primary);
+      background: #fff;
+      border-radius: 999px;
+      padding: 8px 13px;
+      font-size: 12.5px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background .15s ease, color .15s ease;
+      text-align: left;
+    }
+
+    .chip:hover {
+      background: var(--surface);
+    }
+
+    .chip-primary {
+      background: var(--primary);
+      color: #fff;
+    }
+
+    .chip-primary:hover {
+      background: var(--primary-dark);
+    }
+
+    .chip-muted {
+      border-color: var(--border-strong);
+      color: var(--ink-secondary);
+    }
+
+    .chat-input-row {
+      display: flex;
+      gap: 8px;
+      padding: 14px 18px;
+      border-top: 1px solid var(--border);
+      background: #fff;
+    }
+
+    .chat-input-row input {
+      flex: 1;
+      border: 1px solid var(--border-strong);
+      border-radius: 10px;
+      padding: 11px 13px;
+      font-size: 13.5px;
+      outline: none;
+    }
+
+    .chat-input-row input:focus {
+      border-color: var(--teal-600);
+      box-shadow: 0 0 0 3px rgba(14, 124, 134, 0.12);
+    }
+
+    .send-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      border: none;
+      background: var(--navy-900);
+      color: #fff;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex: none;
+    }
+
+    .send-btn:hover {
+      background: var(--teal-700);
+    }
+
+    /* ---- right panel ---- */
+    #right-panel {
+      overflow-y: auto;
+      min-height: 0;
+      background: var(--page);
+    }
+
+    .panel-inner {
+      padding: 40px 48px 80px;
+      max-width: 1240px;
+      margin: 0 auto;
+      animation: fadeUp .32s ease both;
+    }
+
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .panel-eyebrow {
+      font-size: 11.5px;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      color: var(--teal-700);
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .panel-title {
+      font-size: 22px;
+      font-weight: 750;
+      margin: 0 0 4px;
+      letter-spacing: -0.2px;
+    }
+
+    .panel-subtitle {
+      color: var(--ink-secondary);
+      font-size: 13.5px;
+      margin: 0 0 22px;
+      max-width: 720px;
+      line-height: 1.5;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-sm);
+      padding: 28px 32px;
+      margin-bottom: 24px;
+      overflow: visible;
+    }
+
+    .card svg {
+      max-width: 100%;
+      height: auto;
+    }
+
+    .card-title {
+      font-size: 14.5px;
+      font-weight: 700;
+      margin: 0 0 3px;
+    }
+
+    .card-sub {
+      font-size: 12px;
+      color: var(--ink-muted);
+      margin: 0 0 14px;
+    }
+
+    /* rules editor */
+    .rules-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+
+    .rule-row {
+      display: grid;
+      grid-template-columns: 130px 1fr 46px 30px;
+      gap: 16px;
+      align-items: flex-start;
+      padding: 16px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: #fcfcfb;
+      margin-bottom: 8px;
+    }
+
+    .rule-row.suggested {
+      background: var(--teal-050) !important;
+      border: 1.5px solid var(--teal-500) !important;
+      box-shadow: 0 4px 12px rgba(14, 124, 134, 0.12);
+      position: relative;
+    }
+
+    .rule-row.suggested::after {
+      content: "Suggested Tightening";
+      position: absolute;
+      top: -8px;
+      right: 12px;
+      background: var(--teal-600);
+      color: #fff;
+      font-size: 8.5px;
+      font-weight: 700;
+      text-transform: uppercase;
+      padding: 2px 6px;
+      border-radius: 4px;
+      letter-spacing: 0.5px;
+    }
+
+    .rule-row.inactive {
+      opacity: 0.45;
+    }
+
+    .rule-tag {
+      font-size: 10.5px;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+      text-transform: uppercase;
+      color: var(--primary);
+      background: rgba(15, 109, 142, 0.1);
+      border-radius: 6px;
+      padding: 5px 7px;
+      text-align: center;
+      height: fit-content;
+    }
+
+    .rule-text {
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      background: #ffffff;
+      font-size: 13px;
+      line-height: 1.5;
+      color: var(--ink-primary);
+      padding: 8px 12px;
+      outline: none;
+      min-height: 20px;
+      box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.03);
+      transition: all 0.2s;
+    }
+
+    .rule-text:hover {
+      border-color: #94a3b8;
+    }
+
+    .rule-text:focus {
+      border-color: var(--teal-500);
+      box-shadow: 0 0 0 3px rgba(0, 163, 155, 0.15), inset 0 1px 2px rgba(0, 0, 0, 0.03);
+    }
+
+    .code-badge {
+      display: inline-flex;
+      align-items: center;
+      background: #e0f2fe;
+      color: #0369a1;
+      border: 1px solid #7dd3fc;
+      font-weight: 700;
+      font-size: 12px;
+      padding: 2px 7px;
+      border-radius: 6px;
+      margin: 0 3px;
+      vertical-align: middle;
+      line-height: 1.3;
+      box-shadow: 0 1px 2px rgba(3, 105, 161, 0.08);
+    }
+
+    .toggle {
+      position: relative;
+      width: 36px;
+      height: 20px;
+      border-radius: 999px;
+      background: #dcdfe4;
+      cursor: pointer;
+      flex: none;
+      transition: background .15s;
+    }
+
+    .toggle.on {
+      background: var(--primary);
+    }
+
+    .toggle .knob {
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: #fff;
+      transition: left .15s;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
+    }
+
+    .toggle.on .knob {
+      left: 18px;
+    }
+
+    .icon-btn {
+      border: none;
+      background: transparent;
+      color: var(--ink-muted);
+      cursor: pointer;
+      font-size: 16px;
+      width: 28px;
+      height: 28px;
+      border-radius: 6px;
+    }
+
+    .icon-btn:hover {
+      background: #f0f1f3;
+      color: var(--critical);
+    }
+
+    .add-rule-row {
+      display: flex;
+      gap: 8px;
+    }
+
+    .select-cat {
+      border: 1px solid var(--border-strong);
+      border-radius: 8px;
+      padding: 8px;
+      font-size: 12px;
+      background: #fff;
+    }
+
+    .add-rule-row input {
+      flex: 1;
+      border: 1px solid var(--border-strong);
+      border-radius: 8px;
+      padding: 8px 10px;
+      font-size: 12.5px;
+    }
+
+    .btn-row {
+      display: flex;
+      gap: 10px;
+      margin-top: 16px;
+      align-items: center;
+    }
+
+    .btn-tealsolid {
+      background: var(--teal-600);
+      color: #fff;
+    }
+
+    .btn-tealsolid:hover {
+      background: var(--teal-700);
+    }
+
+    .btn-outline {
+      background: #fff;
+      border: 1px solid var(--border-strong);
+      color: var(--ink-primary);
+    }
+
+    .btn-outline:hover {
+      border-color: var(--teal-600);
+      color: var(--teal-700);
+    }
+
+    .link-btn {
+      background: transparent;
+      border: none;
+      color: var(--teal-700);
+      font-weight: 600;
+      font-size: 13px;
+      cursor: pointer;
+      padding: 8px 4px;
+    }
+
+    /* review list */
+    .review-list {
+      list-style: none;
+      margin: 0 0 6px;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .review-list li {
+      display: flex;
+      gap: 10px;
+      font-size: 13px;
+      line-height: 1.55;
+      padding: 10px 12px;
+      background: #fcfcfb;
+      border: 1px solid var(--border);
+      border-radius: 9px;
+    }
+
+    .review-list .rule-tag {
+      font-size: 10.5px;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+      text-transform: uppercase;
+      color: var(--primary);
+      background: rgba(15, 109, 142, 0.1);
+      border-radius: 6px;
+      padding: 5px 7px;
+      text-align: center;
+      height: fit-content;
+    }
+
+    /* pipeline */
+    .pipeline-list {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .pstep {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 11px 4px;
+      font-size: 13.5px;
+      color: var(--ink-muted);
+    }
+
+    .pstep .pdot {
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      border: 2px solid var(--border-strong);
+      flex: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+    }
+
+    .pstep.active {
+      color: var(--ink-primary);
+    }
+
+    .pstep.active .pdot {
+      border-color: var(--teal-600);
+    }
+
+    .pstep.done {
+      color: var(--ink-primary);
+    }
+
+    .pstep.done .pdot {
+      background: var(--teal-600);
+      border-color: var(--teal-600);
+      color: #fff;
+    }
+
+    .spin {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      border: 2px solid var(--teal-100);
+      border-top-color: var(--teal-600);
+      animation: spin .7s linear infinite;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .progress-track {
+      height: 6px;
+      background: #eceef1;
+      border-radius: 999px;
+      overflow: hidden;
+      margin: 18px 0 4px;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--teal-500), var(--navy-700));
+      width: 0%;
+      transition: width .4s ease;
+    }
+
+    /* stat tiles */
+    .stat-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      margin-bottom: 18px;
+    }
+
+    .stat-tile {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px 18px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .stat-tile .label {
+      font-size: 11.5px;
+      color: var(--ink-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+      margin-bottom: 6px;
+      min-height: 32px;
+    }
+
+    .stat-tile .value {
+      font-size: 24px;
+      font-weight: 750;
+      letter-spacing: -0.3px;
+    }
+
+    .stat-tile .sub {
+      font-size: 12px;
+      color: var(--ink-secondary);
+      margin-top: 4px;
+    }
+
+    .delta {
+      font-weight: 700;
+    }
+
+    .delta.up-good {
+      color: var(--good-text);
+    }
+
+    .delta.down-bad {
+      color: var(--critical);
+    }
+
+    .delta.neutral {
+      color: var(--ink-muted);
+    }
+
+    /* charts generic */
+    .chart-grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+    }
+
+    .chart-legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px 18px;
+      margin-top: 10px;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 12px;
+      color: var(--ink-secondary);
+    }
+
+    .legend-swatch {
+      width: 10px;
+      height: 10px;
+      border-radius: 3px;
+      flex: none;
+    }
+
+    .bar-row {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      margin-bottom: 14px;
+      width: 100%;
+    }
+
+    .bar-header {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+      margin-bottom: 4px;
+    }
+
+    .bar-row .blabel {
+      font-size: 12.5px;
+      color: var(--ink-secondary);
+      font-weight: 500;
+    }
+
+    .bar-track {
+      width: 100%;
+      background: #eef0f2;
+      border-radius: 5px;
+      height: 16px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .bar-fill {
+      height: 100%;
+      border-radius: 5px;
+      display: flex;
+      align-items: center;
+    }
+
+    .bar-value {
+      font-size: 12.5px;
+      font-weight: 700;
+      color: var(--ink-primary);
+    }
+
+    .chart-tooltip {
+      position: fixed;
+      background: var(--navy-950);
+      color: #fff;
+      font-size: 11.5px;
+      padding: 7px 10px;
+      border-radius: 7px;
+      pointer-events: none;
+      z-index: 60;
+      opacity: 0;
+      transition: opacity .1s;
+      line-height: 1.4;
+      box-shadow: var(--shadow-md);
+      max-width: 220px;
+    }
+
+    .chart-tooltip.show {
+      opacity: 1;
+    }
+
+    svg text {
+      font-family: inherit;
+    }
+
+    .axis-label {
+      fill: var(--ink-muted);
+      font-size: 10.5px;
+    }
+
+    .gridline {
+      stroke: var(--grid);
+      stroke-width: 1;
+    }
+
+    /* insight / callout card */
+    .callout {
+      border: 1px solid rgba(250, 178, 25, 0.4);
+      background: #fffaf0;
+      border-radius: var(--radius);
+      padding: 18px 20px;
+      margin-bottom: 18px;
+    }
+
+    .callout.teal {
+      border-color: rgba(14, 124, 134, 0.35);
+      background: var(--teal-050);
+    }
+
+    .callout-head {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      margin-bottom: 10px;
+    }
+
+    .callout-icon {
+      width: 26px;
+      height: 26px;
+      border-radius: 8px;
+      background: var(--warning);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 13px;
+      flex: none;
+    }
+
+    .callout.teal .callout-icon {
+      background: var(--teal-600);
+    }
+
+    .callout-head b {
+      font-size: 13.5px;
+    }
+
+    .callout ul {
+      margin: 0 0 14px;
+      padding-left: 20px;
+      font-size: 13px;
+      line-height: 1.6;
+      color: var(--ink-secondary);
+    }
+
+    .callout ul li b {
+      color: var(--ink-primary);
+    }
+
+    /* tables */
+    table.data-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12.5px;
+    }
+
+    table.data-table th {
+      text-align: left;
+      color: var(--ink-muted);
+      font-weight: 600;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+      padding: 8px 10px;
+      border-bottom: 1px solid var(--border-strong);
+    }
+
+    table.data-table td {
+      padding: 9px 10px;
+      border-bottom: 1px solid var(--grid);
+      color: var(--ink-primary);
+    }
+
+    table.data-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .tag-swatch {
+      display: inline-block;
+      width: 9px;
+      height: 9px;
+      border-radius: 3px;
+      margin-right: 7px;
+    }
+
+    .analysis-tabs {
+      display: flex;
+      gap: 6px;
+      margin-bottom: 20px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .a-tab {
+      padding: 10px 6px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--ink-muted);
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      margin-right: 18px;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+
+    .a-tab.on {
+      color: var(--navy-900);
+      border-color: var(--teal-600);
+    }
+
+    .a-tab .check {
+      width: 15px;
+      height: 15px;
+      border-radius: 50%;
+      background: var(--teal-600);
+      color: #fff;
+      font-size: 9px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .km-wrap {
+      position: relative;
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 26px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--navy-950);
+      color: #fff;
+      padding: 11px 18px;
+      border-radius: 10px;
+      font-size: 13px;
+      box-shadow: var(--shadow-md);
+      z-index: 80;
+      opacity: 0;
+      transition: opacity .2s, transform .2s;
+      pointer-events: none;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(-6px);
+    }
+
+    .summary-section {
+      margin-bottom: 28px;
+    }
+
+    .section-header {
+      font-size: 14.5px;
+      font-weight: 600;
+      color: var(--navy-900);
+      margin: 24px 0 14px 0;
+      padding-bottom: 8px;
+      border-bottom: 1.5px solid var(--border-strong);
+      letter-spacing: 0.3px;
+    }
+
+    .final-hero {
+      background: linear-gradient(135deg, var(--navy-900), var(--teal-700));
+      color: #fff;
+      border-radius: var(--radius);
+      padding: 26px 28px;
+      margin-bottom: 18px;
+    }
+
+    .final-hero h3 {
+      margin: 0 0 8px;
+      font-size: 18px;
+    }
+
+    .final-hero p {
+      margin: 0;
+      font-size: 13.5px;
+      line-height: 1.6;
+      color: rgba(255, 255, 255, 0.88);
+      max-width: 820px;
+    }
+
+    .recap-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-bottom: 18px;
+    }
+
+    .recap-card {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px 18px;
+    }
+
+    .recap-card .rc-title {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+      color: var(--teal-700);
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .recap-card .rc-value {
+      font-size: 20px;
+      font-weight: 750;
+      margin-bottom: 4px;
+    }
+
+    .recap-card .rc-sub {
+      font-size: 12px;
+      color: var(--ink-secondary);
+    }
+
+    .scroll-fade {
+      scrollbar-width: thin;
+    }
+
+    ::-webkit-scrollbar {
+      width: 9px;
+      height: 9px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #d3d6db;
+      border-radius: 99px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    @media (max-width:1080px) {
+      .explore-grid {
+        grid-template-columns: 340px 1fr;
+      }
+
+      .stat-row {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .chart-grid-2 {
+        grid-template-columns: 1fr;
+      }
+
+      .recap-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head><body>
+
+  <!-- ============ LANDING ============ -->
+  <section id="view-landing">
+    <div class="landing-nav">
+      <div class="brand-lockup" onclick="location.reload()">
+        <img src="Tredence_KMK_Logo-removebg-preview.png" alt="Tredence KMK Logo"
+          style="height: 65px; object-fit: contain; transform: scale(1.25); transform-origin: left center;">
+      </div>
+      <div class="landing-nav-links">
+      </div>
+    </div>
+
+    <div class="landing-hero">
+      <div class="landing-hero-inner">
+        <div style="display:flex; flex-direction:column; justify-content:center;">
+          <style>
+            #btn-explore:hover {
+              transform: translateY(-2px);
+              box-shadow: 0 14px 28px rgba(218, 131, 50, 0.4) !important;
+            }
+          </style>
+          <div
+            style="display:inline-flex; align-items:center; gap:6px; background:#e8f4f6; color:#12939f; font-size:12px; font-weight:600; padding:6px 12px; border-radius:999px; width:fit-content; margin-bottom:20px;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path
+                d="M12 2v4m0 12v4M4.93 4.93l2.83 2.83m8.48 8.48l2.83 2.83M2 12h4m12 0h4M4.93 19.07l2.83-2.83m8.48-8.48l2.83-2.83" />
+            </svg>
+            AI-Powered Market Analytics
+          </div>
+          <h1 style="font-size:36px; font-weight:700; color:var(--navy-900); margin:0 0 16px; line-height:1.2;">
+            Analytics Pipeline</h1>
+          <p style="font-size:15.5px; color:var(--ink-secondary); line-height:1.6; margin:0 0 32px; max-width:480px;">
+            Select an analysis type to begin your AI-assisted market study. Configure
+            business rules, refine with our chatbot, and get actionable insights to support
+            your product's positioning.
+          </p>
+
+          <div id="btn-explore"
+            style="background:#da8332; border-radius:12px; padding:24px; color:#fff; cursor:pointer; position:relative; overflow:hidden; transition:transform 0.15s, box-shadow 0.15s; box-shadow:0 10px 25px rgba(218,131,50,0.3); margin-bottom:16px;">
+            <div
+              style="position:absolute; top:16px; right:16px; background:rgba(255,255,255,0.25); border-radius:6px; font-size:11px; font-weight:600; padding:4px 8px;">
+              AI-Powered</div>
+            <div
+              style="width:40px; height:40px; background:rgba(255,255,255,0.2); border-radius:8px; display:flex; align-items:center; justify-content:center; margin-bottom:16px;">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                <circle cx="9" cy="7" r="4"></circle>
+                <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+              </svg>
+            </div>
+            <div style="font-size:18px; font-weight:700; margin-bottom:8px;">Patient Cohort</div>
+            <div style="font-size:13.5px; opacity:0.9; line-height:1.5;">Build custom UC patient cohorts using
+              AI-guided criteria selection. Define inclusion/exclusion criteria, demographics, and clinical
+              parameters interactively.</div>
+          </div>
+
+          <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px;">
+            <!-- Treatment Landscape -->
+            <div
+              style="background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:16px; position:relative; opacity:0.6; cursor:not-allowed;">
+              <div
+                style="position:absolute; top:12px; right:12px; font-size:10px; color:var(--ink-muted); display:flex; align-items:center; gap:4px; background:var(--page); padding:3px 6px; border-radius:4px; border:1px solid var(--border);">
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                  <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                </svg> Build Cohort First
+              </div>
+              <div
+                style="width:32px; height:32px; background:var(--page); border-radius:6px; display:flex; align-items:center; justify-content:center; color:var(--ink-muted); margin-bottom:12px;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path
+                    d="M8 3v3a2 2 0 0 1-2 2H3m18 8h-3a2 2 0 0 1-2-2v-3m0-8h3a2 2 0 0 1 2 2v3M3 13v3a2 2 0 0 0 2 2h3">
+                  </path>
+                </svg>
+              </div>
+              <div style="font-size:14px; font-weight:600; color:var(--navy-900); margin-bottom:6px;">Treatment
+                Landscape</div>
+              <div style="font-size:11.5px; color:var(--ink-secondary); line-height:1.5;">See who holds the market
+                today by drug, how fast new starts are shifting to oral, and size the realistic opportunity for an
+                oral option like Emvistegrast.</div>
+            </div>
+            <!-- Disease Burden -->
+            <div
+              style="background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:16px; position:relative; opacity:0.6; cursor:not-allowed;">
+              <div
+                style="position:absolute; top:12px; right:12px; font-size:10px; color:var(--ink-muted); display:flex; align-items:center; gap:4px; background:var(--page); padding:3px 6px; border-radius:4px; border:1px solid var(--border);">
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                  <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                </svg> Build Cohort First
+              </div>
+              <div
+                style="width:32px; height:32px; background:var(--page); border-radius:6px; display:flex; align-items:center; justify-content:center; color:var(--ink-muted); margin-bottom:12px;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                  <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                </svg>
+              </div>
+              <div style="font-size:14px; font-weight:600; color:var(--navy-900); margin-bottom:6px;">Disease Burden
+                &amp; Segmentation</div>
+              <div style="font-size:11.5px; color:var(--ink-secondary); line-height:1.5;">Segment the UC population by
+                severity proxy, flare frequency, and hospitalization history to refine target patient profiles.</div>
+            </div>
+            <!-- Comorbidity & Utilization -->
+            <div
+              style="background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:16px; position:relative; opacity:0.6; cursor:not-allowed;">
+              <div
+                style="position:absolute; top:12px; right:12px; font-size:10px; color:var(--ink-muted); display:flex; align-items:center; gap:4px; background:var(--page); padding:3px 6px; border-radius:4px; border:1px solid var(--border);">
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                  <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                </svg> Build Cohort First
+              </div>
+              <div
+                style="width:32px; height:32px; background:var(--page); border-radius:6px; display:flex; align-items:center; justify-content:center; color:var(--ink-muted); margin-bottom:12px;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <polyline points="12 6 12 12 16 14"></polyline>
+                </svg>
+              </div>
+              <div style="font-size:14px; font-weight:600; color:var(--navy-900); margin-bottom:6px;">Comorbidity
+                &amp; Utilization</div>
+              <div style="font-size:11.5px; color:var(--ink-secondary); line-height:1.5;">Understand common
+                comorbidities, ER/inpatient utilization, and steroid dependency patterns across the UC population.
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="landing-visual">
+          <div class="vwin-bar"><span></span><span></span><span></span></div>
+          <div class="mini-chat-row">
+            <div class="mini-avatar">AI</div>
+            <div class="mini-bubble">What would you like to explore today?</div>
+          </div>
+          <div class="mini-chat-row">
+            <div class="mini-bubble me" style="margin-left:auto;">Understand the UC market for our Phase 2 asset,
+              Emvistegrast</div>
+          </div>
+          <div class="mini-chat-row">
+            <div class="mini-avatar">AI</div>
+            <div class="mini-bubble">Here's a suggested cohort definition — 7 business rules based on standard UC
+              real-world evidence criteria. Want to review them?</div>
+          </div>
+          <div class="mini-stats">
+            <div class="mini-stat"><b>37.0K</b><span>Cohort Patients</span></div>
+            <div class="mini-stat"><b>22.3K</b><span>Advanced-Tx Treated</span></div>
+            <div class="mini-stat"><b>5.6K</b><span>Potential Market</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ EXPLORE APP ============ -->
+  <section id="view-explore" class="hidden">
+    <div class="app-header">
+      <div class="header-left">
+        <div class="brand-lockup" id="btn-home" style="margin-right: 40px;" onclick="location.reload()">
+          <img src="Tredence_KMK_Logo-removebg-preview.png" alt="Tredence KMK Logo"
+            style="height: 45px; object-fit: contain; transform: scale(1.25); transform-origin: left center;">
+        </div>
+        <div class="crumb">Explore <b>/ Cohort Builder</b></div>
+      </div>
+      <div class="header-right">
+        <div class="avatar-badge">U</div>
+      </div>
+    </div>
+
+    <div class="stepper" id="stepper"></div>
+
+    <div class="explore-grid">
+      <aside id="chat-panel">
+        <div class="chat-head" style="display:flex; justify-content:space-between; align-items:center; width:100%;">
+          <div style="display:flex; align-items:center; gap:12px;">
+            <div class="ai-avatar">AI</div>
+            <div>
+              <b>APLD Assistant</b>
+              <div class="status"><span class="dot"></span> Connected to claims warehouse</div>
+            </div>
+          </div>
+          <button id="btn-collapse-chat" class="collapse-toggle-btn" title="Collapse Chat" type="button">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="15 18 9 12 15 6"></polyline>
+            </svg>
+          </button>
+        </div>
+        <div id="chat-messages"></div>
+        <div id="chips-row"></div>
+        <form class="chat-input-row" id="chat-form">
+          <input type="text" id="chat-input" placeholder="Type a message…" autocomplete="off">
+          <button type="submit" class="send-btn" aria-label="Send">➤</button>
+        </form>
+      </aside>
+      <main id="right-panel">
+        <div class="panel-inner" id="panel-inner"></div>
+      </main>
+    </div>
+  </section>
+
+  <div class="toast" id="toast"></div>
+
+  <!-- Floating chat expand button -->
+  <button id="btn-expand-chat" class="chat-expand-btn hidden" title="Expand Chat" type="button">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+      stroke-linecap="round" stroke-linejoin="round" style="margin-right: 6px;">
+      <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+    </svg>
+    <span>APLD Assistant</span>
+  </button>
+
+  <script>
+
+    /* ============================================================
+       DATA
+    ============================================================ */
+    const DATA = {
+      cohortV1: {
+        label: "Initial Run",
+        kpis: { total: 40420, avgAge: 42.6, pctFemale: 47.8, avgFollowup: 14.5 },
+        funnel: [
+          { label: "Members with ≥1 UC diagnosis claim (ICD-10 K51.x)", value: 96400 },
+          { label: "≥2 qualifying diagnosis claims", value: 74820 },
+          { label: "Age ≥ 18 at index", value: 71150 },
+          { label: "Continuous enrollment met", value: 52930 },
+          { label: "Treatment evidence within 90 days", value: 44760 },
+          { label: "Final cohort (post-exclusions)", value: 40420 }
+        ],
+        age: [{ label: "18–34", value: 26 }, { label: "35–49", value: 24 }, { label: "50–64", value: 32 }, { label: "65+", value: 18 }],
+        gender: [{ label: "Female", value: 47.8 }, { label: "Male", value: 52.2 }],
+        payer: [{ label: "Commercial", value: 58 }, { label: "Medicare", value: 27 }, { label: "Medicaid", value: 15 }],
+        state: [{ label: "CA", value: 15 }, { label: "TX", value: 11 }, { label: "FL", value: 10 }, { label: "Other", value: 64 }],
+        treatmentStage: [{ label: "Conventional therapy only", value: 46 }, { label: "Advanced therapy — naive start", value: 34 }, { label: "Advanced therapy — class switch", value: 14 }, { label: "Advanced therapy — restart", value: 6 }]
+      },
+      cohortV2: {
+        label: "Refined Run",
+        kpis: { total: 36980, avgAge: 42.9, pctFemale: 47.3, avgFollowup: 14.8 },
+        funnel: [
+          { label: "Members with ≥1 UC diagnosis claim (ICD-10 K51.x)", value: 96400 },
+          { label: "≥2 claims, ≥30 days apart, different providers", value: 68110 },
+          { label: "Age ≥ 18 at index", value: 64860 },
+          { label: "Continuous enrollment met", value: 48230 },
+          { label: "Treatment evidence within 90 days", value: 40870 },
+          { label: "Final cohort (post-exclusions, incl. competing Crohn's dx)", value: 36980 }
+        ],
+        age: [{ label: "18–34", value: 25 }, { label: "35–49", value: 24 }, { label: "50–64", value: 33 }, { label: "65+", value: 18 }],
+        gender: [{ label: "Female", value: 47.3 }, { label: "Male", value: 52.7 }],
+        payer: [{ label: "Commercial", value: 59 }, { label: "Medicare", value: 26 }, { label: "Medicaid", value: 15 }],
+        state: [{ label: "CA", value: 14 }, { label: "TX", value: 11 }, { label: "FL", value: 10 }, { label: "Other", value: 65 }],
+        treatmentStage: [{ label: "Conventional therapy only", value: 45 }, { label: "Advanced therapy — naive start", value: 35 }, { label: "Advanced therapy — class switch", value: 14 }, { label: "Advanced therapy — restart", value: 6 }]
+      },
+      landscape: {
+        totalTreated: 22300,
+        drugs: [
+          { name: "Entyvio", class: "Anti-integrin", route: "iv_sc", color: "#1baf7a", active: 5340 },
+          { name: "Humira", class: "Anti-TNF", route: "sc", color: "#2a78d6", active: 3200 },
+          { name: "Stelara", class: "IL-12/23 inhibitor", route: "sc", color: "#eda100", active: 2230 },
+          { name: "Rinvoq", class: "JAK inhibitor", route: "oral", color: "#e87ba4", active: 2200 },
+          { name: "Omvoh", class: "IL-23 inhibitor", route: "sc", color: "#eb6834", active: 2050 },
+          { name: "Remicade", class: "Anti-TNF", route: "iv", color: "#2a78d6", active: 1800 },
+          { name: "Skyrizi", class: "IL-23 inhibitor", route: "sc", color: "#eb6834", active: 1740 },
+          { name: "Simponi", class: "Anti-TNF", route: "sc", color: "#2a78d6", active: 1150 },
+          { name: "Zeposia", class: "S1P modulator", route: "oral", color: "#4a3aa7", active: 980 },
+          { name: "Xeljanz", class: "JAK inhibitor", route: "oral", color: "#e87ba4", active: 920 },
+          { name: "Velsipity", class: "S1P modulator", route: "oral", color: "#4a3aa7", active: 690 }
+        ],
+        routeSplit: [
+          { label: "Subcutaneous", value: 12510, color: "#2a78d6" },
+          { label: "Intravenous", value: 5000, color: "#94a3b8" },
+          { label: "Oral", value: 4790, color: "#1baf7a" }
+        ],
+        quarterlyRouteMix: [
+          { q: "Q1-23", oral: 12, iv: 30, sc: 58 },
+          { q: "Q2-23", oral: 14, iv: 29, sc: 57 },
+          { q: "Q3-23", oral: 16, iv: 28, sc: 56 },
+          { q: "Q4-23", oral: 19, iv: 26, sc: 55 },
+          { q: "Q1-24", oral: 22, iv: 25, sc: 53 },
+          { q: "Q2-24", oral: 25, iv: 23, sc: 52 },
+          { q: "Q3-24", oral: 28, iv: 22, sc: 50 },
+          { q: "Q4-24", oral: 31, iv: 20, sc: 49 },
+          { q: "Q1-25", oral: 34, iv: 19, sc: 47 },
+          { q: "Q2-25", oral: 37, iv: 17, sc: 46 }
+        ],
+        combinationMix: [
+          { label: "Monotherapy", value: 78, color: "#2a78d6" },
+          { label: "Advanced therapy + immunomodulator", value: 17, color: "#eda100" },
+          { label: "Dual advanced-therapy combination", value: 5, color: "#e34948" }
+        ],
+        oralSequencing: {
+          newOralStarts: 1840,
+          naivePct: 61,
+          switchedPct: 39,
+          avgMonthsOnInjectableBeforeSwitch: 11.4
+        },
+        opportunity: {
+          segments: [
+            { label: "Stable Entyvio (IV/SC) patients — convenience-switch candidates", value: 3200, color: "#1baf7a" },
+            { label: "New advanced-therapy starts likely to prefer an oral option", value: 1450, color: "#2a78d6" },
+            { label: "Injectable-fatigue switchers from other classes", value: 980, color: "#eda100" }
+          ],
+          total: 5630
+        }
+      }
+    };
+
+    const COHORT_RULES_V1 = () => ([
+      { id: cid(), category: "Diagnosis", text: "At least 2 medical claims with ICD-10 K51.90 (Ulcerative colitis, unspecified), K51.20 (Ulcerative (chronic) proctitis), or K51.00 (Ulcerative (chronic) pancolitis) on different dates within a 12-month period", active: true },
+      { id: cid(), category: "Index Date", text: "Date of the first qualifying UC diagnosis claim, between Jan 2023 and Dec 2025", active: true },
+      { id: cid(), category: "Demographics", text: "Age ≥ 18 years as of index date", active: true },
+      { id: cid(), category: "Enrollment", text: "Continuous medical & pharmacy enrollment for ≥ 6 months pre-index and ≥ 12 months post-index", active: true },
+      { id: cid(), category: "Treatment", text: "At least one pharmacy or medical claim for a 5-ASA, corticosteroid, immunomodulator, biologic, JAK inhibitor, or S1P modulator UC-directed therapy within 90 days of index", active: true },
+      { id: cid(), category: "Exclusion", text: "Exclude patients with a prior total colectomy or ileostomy procedure claim before index", active: true }
+    ]);
+
+    const COHORT_RULES_V2_PATCH = (rules, toggles) => {
+      const r = rules.map(x => ({ ...x }));
+      const t = toggles || { tightenDx: true, excludeCrohns: true };
+
+      const dx = r.find(x => x.category === "Diagnosis" && x.text.includes("ICD-10 K51"));
+      if (dx) {
+        dx.text = "At least 2 medical claims with ICD-10 K51.90, K51.20, or K51.00, on different dates ≥30 days apart, from two different provider visits, within a 12-month period";
+        dx.isSuggestion = true;
+        dx.active = t.tightenDx;
+      }
+
+      if (!r.some(x => x.text.includes("competing Crohn's"))) {
+        r.push({ id: cid(), category: "Exclusion", text: "Exclude patients with a competing Crohn's disease diagnosis (ICD-10 K50.x) within 90 days of index", active: t.excludeCrohns, isSuggestion: true });
+      }
+      return r;
+    };
+
+    const LANDSCAPE_RULES = () => ([
+      { id: cid(), category: "Market Basket", text: "Advanced UC therapies considered: Humira, Remicade, Simponi (Anti-TNF), Entyvio (Anti-integrin), Stelara (IL-12/23), Omvoh, Skyrizi (IL-23), Rinvoq, Xeljanz (JAK), Zeposia, Velsipity (S1P)", active: true },
+      { id: cid(), category: "Route Classification", text: "Classify each advanced-therapy claim by administration route: Oral (Rinvoq, Xeljanz, Zeposia, Velsipity), Intravenous (Remicade, Entyvio-IV), or Subcutaneous (Humira, Simponi, Entyvio-SC, Stelara, Omvoh, Skyrizi)", active: true },
+      { id: cid(), category: "Combination Therapy", text: "Flag concurrent claims for an immunomodulator (azathioprine, 6-MP, methotrexate) or a second advanced-therapy class overlapping ≥60 days as combination therapy", active: true },
+      { id: cid(), category: "Oral-Start Sequencing", text: "For each new oral advanced-therapy claim, classify as Advanced-Therapy Naive (no advanced-therapy claim in the 12 months prior) or Switched from Injectable (prior IV/SC advanced-therapy claim within 90 days)", active: true },
+      { id: cid(), category: "Convenience-Switch Candidate", text: "Flag patients on a stable Entyvio (IV/SC) regimen for ≥ 6 months with no adverse-event-related claims as a convenience-switch candidate for an oral integrin option", active: true },
+      { id: cid(), category: "New-Start Oral Preference", text: "Estimate the share of new advanced-therapy starts likely to prefer an oral option, based on the observed quarterly growth trend in oral share of new starts", active: true }
+    ]);
+
+    /* ============================================================
+       ANALYSIS META
+    ============================================================ */
+    const ANALYSIS_META = {
+      landscape: {
+        label: "Treatment Landscape & Market Opportunity",
+        rules: LANDSCAPE_RULES,
+        pipeline: [
+          "Extracting advanced-therapy claims by brand and route",
+          "Classifying route of administration: oral, IV, or subcutaneous",
+          "Flagging combination-therapy patterns",
+          "Classifying new oral starts as naive or switched-from-injectable",
+          "Identifying convenience-switch and new-start oral-preference segments",
+          "Sizing the potential market for an oral integrin option",
+          "Rendering results"
+        ],
+        ackText: "Here are suggested business rules for the <b>Treatment Landscape &amp; Market Opportunity analysis</b> — how we'll classify administration route, combination therapy, and where new oral starts come from, and how we'll size the potential market for an oral option. Edit as needed.",
+        confirmText: "To summarize: we'll classify every advanced-therapy claim by drug and route (oral/IV/SC), flag combination therapy, split new oral starts into naive vs. switched-from-injectable, and size the potential market for an oral integrin option like Emvistegrast. Ready to run?"
+      }
+    };
+
+    let CID = 1;
+    function cid() { return "r" + (CID++); }
+
+    /* ============================================================
+       STATE + UTIL
+    ============================================================ */
+    const STATE = { cohortRuleset: null, cohortRunNum: 0, completedAnalyses: [], businessAsked: false };
+    function sleep(ms) { return new Promise(res => setTimeout(res, ms)); }
+    function escapeHtml(s) { const d = document.createElement("div"); d.textContent = s; return d.innerHTML; }
+    function fmt(n) { return Math.round(n).toLocaleString("en-US"); }
+    function pct(n, d) { return ((n / d) * 100).toFixed(1); }
+
+    function toast(msg) {
+      const t = document.getElementById("toast");
+      t.textContent = msg;
+      t.classList.add("show");
+      clearTimeout(toast._h);
+      toast._h = setTimeout(() => t.classList.remove("show"), 2600);
+    }
+
+    /* ============================================================
+       CHAT ENGINE
+    ============================================================ */
+    const chatEl = document.getElementById("chat-messages");
+    const chipsEl = document.getElementById("chips-row");
+    let freeTextHandler = null;
+
+    function scrollChatBottom() { chatEl.scrollTop = chatEl.scrollHeight + 200; }
+
+    function addMessage(from, html) {
+      const div = document.createElement("div");
+      div.className = "msg msg-" + from;
+      if (from === "ai") {
+        div.innerHTML = '<div class="avatar ai-avatar">AI</div><div class="bubble">' + html + '</div>';
+      } else {
+        div.innerHTML = '<div class="bubble">' + html + '</div><div class="avatar user-avatar">U</div>';
+      }
+      chatEl.appendChild(div);
+      scrollChatBottom();
+    }
+
+    function showTyping() {
+      const t = document.createElement("div");
+      t.className = "msg msg-ai";
+      t.id = "typing-indicator";
+      t.innerHTML = '<div class="avatar ai-avatar">AI</div><div class="bubble typing-bubble"><span></span><span></span><span></span></div>';
+      chatEl.appendChild(t);
+      scrollChatBottom();
+    }
+    function hideTyping() { const t = document.getElementById("typing-indicator"); if (t) t.remove(); }
+
+    async function aiSay(html, delay) {
+      showTyping();
+      await sleep(delay === undefined ? 900 : delay);
+      hideTyping();
+      addMessage("ai", html);
+    }
+    function userSay(text) { addMessage("user", escapeHtml(text)); }
+
+    function setChips(list) {
+      chipsEl.innerHTML = "";
+      (list || []).forEach(c => {
+        const b = document.createElement("button");
+        b.className = "chip" + (c.primary ? " chip-primary" : "") + (c.muted ? " chip-muted" : "");
+        b.textContent = c.label;
+        b.onclick = () => { chipsEl.innerHTML = ""; freeTextHandler = null; c.onClick(); };
+        chipsEl.appendChild(b);
+      });
+    }
+
+    document.getElementById("chat-form").addEventListener("submit", (e) => {
+      e.preventDefault();
+      const input = document.getElementById("chat-input");
+      const val = input.value.trim();
+      if (!val) return;
+      userSay(val);
+      input.value = "";
+      chipsEl.innerHTML = "";
+      if (freeTextHandler) { const fn = freeTextHandler; freeTextHandler = null; fn(val); }
+      else { toast("Noted — continuing with the guided walkthrough."); }
+    });
+
+    /* ============================================================
+       RIGHT PANEL RENDERING
+    ============================================================ */
+    const panelInner = document.getElementById("panel-inner");
+    function renderPanel(nodeOrHtml) {
+      panelInner.classList.remove("panel-inner");
+      void panelInner.offsetWidth;
+      panelInner.classList.add("panel-inner");
+      if (typeof nodeOrHtml === "string") { panelInner.innerHTML = nodeOrHtml; }
+      else { panelInner.innerHTML = ""; panelInner.appendChild(nodeOrHtml); }
+      document.getElementById("right-panel").scrollTop = 0;
+    }
+    function h(tag, cls, html) { const e = document.createElement(tag); if (cls) e.className = cls; if (html !== undefined) e.innerHTML = html; return e; }
+
+    /* ============================================================
+       STEPPER
+    ============================================================ */
+    const STEPS = ["Define Cohort", "Refine Cohort", "Business Question", "Market Deep-Dive", "Summary"];
+    function renderStepper(activeIdx) {
+      const wrap = document.getElementById("stepper");
+      wrap.innerHTML = "";
+      STEPS.forEach((label, i) => {
+        if (i > 0) { wrap.appendChild(h("div", "step-line" + (i <= activeIdx ? " done" : ""))); }
+        const s = h("div", "step" + (i < activeIdx ? " done" : i === activeIdx ? " active" : ""));
+        let dotContent = (i < activeIdx) ? "✓" : (i + 1);
+        s.innerHTML = '<div class="dot">' + dotContent + '</div><span>' + label + '</span>';
+        wrap.appendChild(s);
+      });
+    }
+
+    /* ============================================================
+       CHART BUILDERS (inline SVG / HTML)
+    ============================================================ */
+    function resolveColor(c) {
+      if (c && c.startsWith("var(")) {
+        const varName = c.slice(4, -1).trim();
+        return getComputedStyle(document.documentElement).getPropertyValue(varName).trim() || "#999";
+      }
+      return c;
+    }
+
+    function statTiles(items) {
+      const wrap = h("div", "stat-row");
+      wrap.style.gridTemplateColumns = 'repeat(' + items.length + ', 1fr)';
+      items.forEach(it => {
+        const t = h("div", "stat-tile");
+        let deltaHtml = "";
+        if (it.delta) {
+          const cls = it.deltaGood === false ? "down-bad" : (it.deltaGood ? "up-good" : "neutral");
+          deltaHtml = '<span class="delta ' + cls + '">' + it.delta + '</span> ';
+        }
+        t.innerHTML = '<div class="label">' + it.label + '</div><div class="value">' + it.value + '</div><div class="sub">' + deltaHtml + (it.sub || "") + '</div>';
+        wrap.appendChild(t);
+      });
+      return wrap;
+    }
+
+    function makeTooltip() {
+      let tt = document.getElementById("shared-chart-tooltip");
+      if (!tt) { tt = h("div", "chart-tooltip"); tt.id = "shared-chart-tooltip"; document.body.appendChild(tt); }
+      return tt;
+    }
+    function showTooltip(evt, html) {
+      const tt = makeTooltip();
+      tt.innerHTML = html;
+      tt.style.left = (evt.clientX + 14) + "px";
+      tt.style.top = (evt.clientY + 14) + "px";
+      tt.classList.add("show");
+    }
+    function moveTooltip(evt) { const tt = makeTooltip(); tt.style.left = (evt.clientX + 14) + "px"; tt.style.top = (evt.clientY + 14) + "px"; }
+    function hideTooltip() { const tt = makeTooltip(); tt.classList.remove("show"); }
+
+    function barChart(opts) {
+      // opts: {title, subtitle, data:[{label,value,color}], unit, maxValue}
+      const card = h("div", "card");
+      card.style.display = "flex";
+      card.style.flexDirection = "column";
+      card.style.alignItems = "center";
+      card.style.justifyContent = "center";
+      const titleEl = h("div", "card-title", opts.title);
+      titleEl.style.textAlign = "center";
+      titleEl.style.marginBottom = "16px";
+      card.appendChild(titleEl);
+      if (opts.subtitle) {
+        const subEl = h("div", "card-sub", opts.subtitle);
+        subEl.style.textAlign = "center";
+        card.appendChild(subEl);
+      }
+      const max = opts.maxValue || Math.max(...opts.data.map(d => d.value)) * 1.08;
+      const total = opts.data.reduce((s, d) => s + d.value, 0);
+      const rows = h("div");
+      rows.style.width = "100%";
+      rows.style.padding = "0 20px";
+      opts.data.forEach(d => {
+        const row = h("div", "bar-row");
+        const wPct = Math.max((d.value / max) * 100, 2);
+        const color = resolveColor(d.color || "var(--series-1)");
+        const sharePct = total > 0 ? ((d.value / total) * 100).toFixed(1) + "%" : "";
+        const valueLabel = opts.unit === "pct"
+          ? d.value.toFixed(1) + "%"
+          : (opts.showPct ? fmt(d.value) + " (" + sharePct + ")" : fmt(d.value));
+        row.innerHTML =
+          '<div class="bar-header">' +
+          '<div class="blabel">' + d.label + '</div>' +
+          '<div class="bar-value">' + valueLabel + '</div>' +
+          '</div>' +
+          '<div class="bar-track"><div class="bar-fill" style="width:' + wPct + '%; background:' + color + '"></div></div>';
+        const track = row.querySelector(".bar-fill");
+        track.addEventListener("mousemove", (e) => showTooltip(e, '<b>' + d.label + '</b><br>' + (opts.unit === "pct" ? d.value.toFixed(1) + "%" : fmt(d.value) + " patients" + (opts.showPct ? " (" + sharePct + ")" : ""))));
+        track.addEventListener("mouseleave", hideTooltip);
+        rows.appendChild(row);
+      });
+      card.appendChild(rows);
+      return card;
+    }
+
+    function donutChart(opts) {
+      // opts: {title, subtitle, data:[{label,value,color}]}
+      const card = h("div", "card");
+      card.style.display = "flex";
+      card.style.flexDirection = "column";
+      card.style.alignItems = "center";
+      card.style.justifyContent = "center";
+      const titleEl = h("div", "card-title", opts.title);
+      titleEl.style.textAlign = "center";
+      titleEl.style.marginBottom = "16px";
+      card.appendChild(titleEl);
+      if (opts.subtitle) {
+        const subEl = h("div", "card-sub", opts.subtitle);
+        subEl.style.textAlign = "center";
+        card.appendChild(subEl);
+      }
+      const total = opts.data.reduce((a, b) => a + b.value, 0);
+      const size = 168, r = 62, cx = size / 2, cy = size / 2, sw = 26;
+      const circ = 2 * Math.PI * r;
+      let offset = 0;
+      const svgns = "http://www.w3.org/2000/svg";
+      const svg = document.createElementNS(svgns, "svg");
+      svg.setAttribute("width", size); svg.setAttribute("height", size);
+      svg.setAttribute("viewBox", "0 0 " + size + " " + size);
+      const bg = document.createElementNS(svgns, "circle");
+      bg.setAttribute("cx", cx); bg.setAttribute("cy", cy); bg.setAttribute("r", r);
+      bg.setAttribute("fill", "none"); bg.setAttribute("stroke", "var(--grid)"); bg.setAttribute("stroke-width", sw);
+      svg.appendChild(bg);
+      opts.data.forEach((d, i) => {
+        const frac = d.value / total;
+        const dash = frac * circ;
+        const seg = document.createElementNS(svgns, "circle");
+        seg.setAttribute("cx", cx); seg.setAttribute("cy", cy); seg.setAttribute("r", r);
+        seg.setAttribute("fill", "none");
+        seg.setAttribute("stroke", resolveColor(d.color || ("var(--series-" + (i + 1) + ")")));
+        seg.setAttribute("stroke-width", sw);
+        seg.setAttribute("stroke-dasharray", dash + " " + (circ - dash));
+        seg.setAttribute("stroke-dashoffset", -offset);
+        seg.setAttribute("transform", "rotate(-90 " + cx + " " + cy + ")");
+        seg.style.cursor = "pointer";
+        seg.addEventListener("mousemove", (e) => showTooltip(e, '<b>' + d.label + '</b><br>' + d.value.toFixed(1) + "%"));
+        seg.addEventListener("mouseleave", hideTooltip);
+        svg.appendChild(seg);
+        offset += dash;
+      });
+      const label = document.createElementNS(svgns, "text");
+      label.setAttribute("x", cx); label.setAttribute("y", cy - 2);
+      label.setAttribute("text-anchor", "middle"); label.setAttribute("font-size", "18"); label.setAttribute("font-weight", "750");
+      label.setAttribute("fill", "var(--ink-primary)");
+      label.textContent = opts.centerLabel || (opts.data[0] ? opts.data[0].value.toFixed(0) + "%" : "");
+      svg.appendChild(label);
+      if (opts.centerSub) {
+        const sub = document.createElementNS(svgns, "text");
+        sub.setAttribute("x", cx); sub.setAttribute("y", cy + 16);
+        sub.setAttribute("text-anchor", "middle"); sub.setAttribute("font-size", "9.5"); sub.setAttribute("fill", "var(--ink-muted)");
+        sub.textContent = opts.centerSub;
+        svg.appendChild(sub);
+      }
+      const row = h("div"); row.style.display = "flex"; row.style.gap = "18px"; row.style.alignItems = "center"; row.style.justifyContent = "center"; row.style.width = "100%";
+      const svgWrap = h("div"); svgWrap.appendChild(svg);
+      row.appendChild(svgWrap);
+      const legend = h("div", "chart-legend"); legend.style.flexDirection = "column"; legend.style.marginTop = "0";
+      opts.data.forEach((d, i) => {
+        const li = h("div", "legend-item");
+        li.innerHTML = '<span class="legend-swatch" style="background:' + resolveColor(d.color || ("var(--series-" + (i + 1) + ")")) + '"></span> ' + d.label + ' <b style="margin-left: 8px;">' + d.value.toFixed(1) + '%</b>';
+        legend.appendChild(li);
+      });
+      row.appendChild(legend);
+      card.appendChild(row);
+      return card;
+    }
+
+    function funnelChart(opts) {
+      // opts: {title, subtitle, stages:[{label,value}]}
+      const card = h("div", "card");
+      card.appendChild(h("div", "card-title", opts.title));
+      if (opts.subtitle) card.appendChild(h("div", "card-sub", opts.subtitle));
+      const stages = opts.stages;
+      const max = stages[0].value;
+      const seqSteps = ["--seq-250", "--seq-300", "--seq-350", "--seq-450", "--seq-550", "--seq-600"];
+      const wrap = h("div");
+      stages.forEach((s, i) => {
+        const wPct = Math.max((s.value / max) * 100, 8);
+        const dropPct = i === 0 ? null : (100 - (s.value / stages[i - 1].value) * 100).toFixed(1);
+        const row = h("div"); row.style.marginBottom = "10px";
+        const color = "var(" + seqSteps[Math.min(i, seqSteps.length - 1)] + ")";
+        row.innerHTML =
+          '<div style="display:flex;justify-content:space-between;font-size:12px;color:var(--ink-secondary);margin-bottom:3px;">' +
+          '<span>' + s.label + '</span>' +
+          '<span><b style="color:var(--ink-primary)">' + fmt(s.value) + '</b>' + (dropPct ? '  <span style="color:var(--critical)">(&minus;' + dropPct + '%)</span>' : '') + '</span>' +
+          '</div>' +
+          '<div class="bar-track" style="height:26px;"><div class="bar-fill" style="width:' + wPct + '%; background:' + resolveColor(color) + '"></div></div>';
+        wrap.appendChild(row);
+      });
+      card.appendChild(wrap);
+      return card;
+    }
+
+    function highlightCodesInHtml(text) {
+      if (!text) return "";
+      let safe = escapeHtml(text);
+      const regex = /(ICD-10\s+[A-Z]\d{2}\.[\d\w]+(?:\s*\([^)]+\))?|[A-Z]\d{2}\.[\d\w]+(?:\s*\([^)]+\))?|ICD-10\s+[A-Z]\d{2}(?:\.[\d\w]+)?|ICD-10\s+[A-Z]\d{2}\.[x\d]+)/gi;
+      return safe.replace(regex, (match) => {
+        return `<span class="code-badge">${match}</span>`;
+      });
+    }
+
+    /* ============================================================
+       RULES EDITOR COMPONENT
+    ============================================================ */
+    function rulesEditorCard(title, subtitle, rulesArr, onConfirm, confirmLabel, isCohort = false) {
+      const card = h("div", "card");
+      card.appendChild(h("div", "card-title", title));
+      card.appendChild(h("div", "card-sub", subtitle));
+      const list = h("div", "rules-list");
+      function renderRows() {
+        list.innerHTML = "";
+        rulesArr.forEach(rule => {
+          const row = h("div", "rule-row" + (rule.active ? "" : " inactive") + (rule.isSuggestion ? " suggested" : ""));
+          const tag = h("div", "rule-tag", rule.category);
+          const text = h("div", "rule-text");
+          text.contentEditable = "true";
+          text.innerHTML = highlightCodesInHtml(rule.text);
+          text.addEventListener("input", () => { rule.text = text.innerText; });
+          text.addEventListener("blur", () => {
+            rule.text = text.innerText;
+            text.innerHTML = highlightCodesInHtml(rule.text);
+          });
+          const tgl = h("div", "toggle" + (rule.active ? " on" : ""));
+          tgl.innerHTML = '<div class="knob"></div>';
+          tgl.onclick = () => { rule.active = !rule.active; renderRows(); };
+          const del = h("button", "icon-btn", "✕");
+          del.onclick = () => { const idx = rulesArr.indexOf(rule); rulesArr.splice(idx, 1); renderRows(); };
+          row.appendChild(tag); row.appendChild(text); row.appendChild(tgl); row.appendChild(del);
+          list.appendChild(row);
+        });
+      }
+      renderRows();
+      card.appendChild(list);
+
+      const addRow = h("div", "add-rule-row");
+      if (isCohort) {
+        addRow.innerHTML =
+          '<select class="select-cat"><option>Diagnosis</option><option>Demographics</option><option>Enrollment</option><option>Treatment</option><option>Exclusion</option><option>Custom</option></select>' +
+          '<input type="text" placeholder="Describe an additional business rule…">' +
+          '<button class="btn btn-outline" style="padding:8px 14px;">+ Add rule</button>';
+      } else {
+        addRow.innerHTML =
+          '<input type="text" placeholder="Describe an additional business rule…">' +
+          '<button class="btn btn-outline" style="padding:8px 14px;">+ Add rule</button>';
+      }
+      const addBtn = addRow.querySelector("button");
+      const addInput = addRow.querySelector("input");
+      const addSelect = isCohort ? addRow.querySelector("select") : null;
+      addBtn.onclick = () => {
+        if (!addInput.value.trim()) return;
+        const category = isCohort ? addSelect.value : "Custom";
+        rulesArr.push({ id: cid(), category: category, text: addInput.value.trim(), active: true });
+        addInput.value = "";
+        renderRows();
+      };
+      card.appendChild(addRow);
+
+      const btnRow = h("div", "btn-row");
+      const confirmBtn = h("button", "btn btn-tealsolid", confirmLabel || "Confirm rules & continue");
+
+      confirmBtn.onclick = () => {
+        const activeRules = rulesArr.filter(r => r.active);
+        const overlay = document.getElementById('confirm-modal-overlay');
+        const tbody = document.getElementById('modal-rule-tbody');
+        const count = document.getElementById('modal-rule-count');
+
+        tbody.innerHTML = '';
+        count.textContent = activeRules.length;
+
+        activeRules.forEach(r => {
+          const tr = document.createElement('tr');
+          const tdParam = document.createElement('td');
+          tdParam.style.cssText = "padding:12px; font-size:13px; color:var(--ink-primary); font-weight:600; border-bottom:1px solid var(--border);";
+          tdParam.textContent = r.category;
+          const tdValue = document.createElement('td');
+          tdValue.style.cssText = "padding:12px; font-size:13px; color:var(--ink-secondary); border-bottom:1px solid var(--border);";
+          tdValue.innerHTML = highlightCodesInHtml(r.text);
+          tr.appendChild(tdParam);
+          tr.appendChild(tdValue);
+          tbody.appendChild(tr);
+        });
+
+        overlay.style.display = 'flex';
+
+        const closeHandler = () => { overlay.style.display = 'none'; };
+        document.getElementById('close-modal-btn').onclick = closeHandler;
+        document.getElementById('cancel-modal-btn').onclick = closeHandler;
+
+        document.getElementById('confirm-modal-btn').onclick = () => {
+          overlay.style.display = 'none';
+          onConfirm(activeRules);
+        };
+      };
+
+      btnRow.appendChild(confirmBtn);
+      card.appendChild(btnRow);
+      return card;
+    }
+
+    /* ============================================================
+       PIPELINE ANIMATION
+    ============================================================ */
+    async function runPipeline(container, steps) {
+      const card = h("div", "card");
+      card.appendChild(h("div", "card-title", "Running analysis…"));
+      card.appendChild(h("div", "card-sub", "APLD is querying the claims warehouse and applying your business rules."));
+      const track = h("div", "progress-track"); const fill = h("div", "progress-fill"); track.appendChild(fill);
+      card.appendChild(track);
+      const list = h("div", "pipeline-list");
+      steps.forEach(s => list.appendChild(h("div", "pstep", "<div class='pdot'></div><div>" + s + "</div>")));
+      card.appendChild(list);
+      container.appendChild(card);
+      const rows = list.querySelectorAll(".pstep");
+      for (let i = 0; i < rows.length; i++) {
+        rows[i].classList.add("active");
+        rows[i].querySelector(".pdot").innerHTML = "<div class='spin'></div>";
+        await sleep(720);
+        rows[i].classList.remove("active"); rows[i].classList.add("done");
+        rows[i].querySelector(".pdot").innerHTML = "✓";
+        fill.style.width = (((i + 1) / rows.length) * 100) + "%";
+      }
+      await sleep(350);
+    }
+
+    /* ============================================================
+       FLOW: LANDING -> EXPLORE
+    ============================================================ */
+    document.getElementById("btn-explore").addEventListener("click", () => {
+      startExplore();
+    });
+    const btnCollapse = document.getElementById("btn-collapse-chat");
+    const btnExpand = document.getElementById("btn-expand-chat");
+    const chatPanel = document.getElementById("chat-panel");
+    const exploreGrid = document.querySelector(".explore-grid");
+
+    if (btnCollapse && btnExpand && chatPanel && exploreGrid) {
+      btnCollapse.addEventListener("click", () => {
+        chatPanel.classList.add("collapsed");
+        exploreGrid.classList.add("chat-collapsed");
+        btnExpand.classList.remove("hidden");
+      });
+
+      btnExpand.addEventListener("click", () => {
+        chatPanel.classList.remove("collapsed");
+        exploreGrid.classList.remove("chat-collapsed");
+        btnExpand.classList.add("hidden");
+      });
+    }
+
+    async function startExplore() {
+      document.getElementById("view-landing").classList.add("hidden");
+      document.getElementById("view-explore").classList.remove("hidden");
+      renderStepper(0);
+      renderPanel(h("div", "card", "<div class='card-title'>Welcome to Explore</div><div class='card-sub' style='margin-bottom:0;'>Chat with the APLD Assistant on the left to define a patient cohort from claims data. Suggested replies will appear as chips above the message box.</div>"));
+      await sleep(300);
+      await aiSay("Hi, I'm your <b>APLD Assistant</b>. I can help you build a patient cohort from real-world claims data and then dig into the market analytics that matter to your business question. What would you like to explore today?", 700);
+      offerUseCaseChips();
+    }
+
+    function offerUseCaseChips() {
+      setChips([]);
+      freeTextHandler = () => goToCohortRules();
+    }
+
+    /* ============================================================
+       FLOW: COHORT DEFINITION
+    ============================================================ */
+    async function goToCohortRules() {
+      setChips([]);
+      renderStepper(0);
+      await aiSay("Got it — let's define your <b>Ulcerative Colitis (UC)</b> patient cohort from claims. Based on standard real-world-evidence criteria for UC, here's a starting set of business rules on the right. Feel free to edit the wording, toggle any rule off, or add your own by typing in the chat — then confirm when you're happy with it.", 900);
+      STATE.cohortRunNum = 1;
+      STATE.cohortRuleset = COHORT_RULES_V1();
+      renderPanel(cohortRulesPanel());
+
+      const handleCustomRule = async (val) => {
+        if (!val) return;
+
+        let ruleCategory = "Custom Rule";
+        let ruleText = `Include patients with claims matching: ${val}`;
+
+        const lowerVal = val.toLowerCase();
+        if (lowerVal.includes("k51.2")) {
+          ruleCategory = "Diagnosis";
+          ruleText = "Include patients with at least 1 medical claim for Ulcerative (chronic) proctitis (ICD-10 K51.2) during the observation period";
+        } else if (lowerVal.includes("k51.3")) {
+          ruleCategory = "Diagnosis";
+          ruleText = "Include patients with at least 1 medical claim for Ulcerative (chronic) rectosigmoiditis (ICD-10 K51.3) during the observation period";
+        } else if (lowerVal.includes("k50")) {
+          ruleCategory = "Exclusion";
+          ruleText = "Flag patients with a history of Crohn's disease (ICD-10 K50.x) for manual review rather than automatic exclusion";
+        } else {
+          ruleCategory = "Additional Criteria";
+          ruleText = `Patients must meet criteria: ${val}`;
+        }
+
+        const ruleToAdd = {
+          id: cid(),
+          category: ruleCategory,
+          text: ruleText,
+          active: true
+        };
+
+        await aiSay(`I've refined your request into the following formal business rule:<br><br><b>${ruleText}</b><br><br>Would you like me to add this to your cohort definition?`, 600);
+
+        const confirmAddition = () => {
+          STATE.cohortRuleset.push(ruleToAdd);
+          renderPanel(cohortRulesPanel());
+          setChips([]);
+          aiSay("Rule added. Please review the updated list.", 400).then(() => {
+            freeTextHandler = handleCustomRule;
+          });
+        };
+
+        const discardAddition = () => {
+          setChips([]);
+          freeTextHandler = handleCustomRule;
+        };
+
+        setChips([
+          {
+            label: "Yes, add it",
+            primary: true,
+            onClick: () => { userSay("Yes, add it."); confirmAddition(); }
+          },
+          {
+            label: "No, discard",
+            muted: true,
+            onClick: () => { userSay("No, discard."); discardAddition(); }
+          }
+        ]);
+
+        freeTextHandler = (resp) => {
+          userSay(resp);
+          if (resp.toLowerCase().includes("yes") || resp.toLowerCase().includes("add") || resp.toLowerCase().includes("sure") || resp.toLowerCase().includes("ok")) {
+            confirmAddition();
+          } else {
+            discardAddition();
+          }
+        };
+      };
+      freeTextHandler = handleCustomRule;
+    }
+
+    function cohortRulesPanel() {
+      const wrap = h("div");
+      wrap.appendChild(h("div", "panel-eyebrow", "Step 1 · Cohort Definition"));
+      wrap.appendChild(h("div", "panel-title", "Define the UC patient cohort"));
+      wrap.appendChild(h("div", "panel-subtitle", "These rules translate your business question into inclusion/exclusion logic the platform can run against 214M covered lives of claims data."));
+      wrap.appendChild(rulesEditorCard(
+        "Suggested business rules — UC cohort",
+        "AI-suggested starting point. Add, edit, or disable rules to match your definition.",
+        STATE.cohortRuleset,
+        (activeRules) => runCohortAnalysis(STATE.cohortRunNum || 1),
+        "Confirm rules & continue",
+        true
+      ));
+      return wrap;
+    }
+
+    async function runCohortAnalysis(runNum) {
+      setChips([]); freeTextHandler = null;
+      const wrap = h("div");
+      wrap.appendChild(h("div", "panel-eyebrow", "Step 1 · Cohort Definition"));
+      wrap.appendChild(h("div", "panel-title", runNum === 1 ? "Running cohort query…" : "Re-running with tightened rules…"));
+      renderPanel(wrap);
+      await runPipeline(wrap, [
+        "Querying 214M covered lives",
+        "Applying diagnosis & demographic criteria",
+        "Verifying continuous enrollment",
+        "Confirming treatment evidence within 90 days",
+        "Applying exclusion rules",
+        "Aggregating final cohort"
+      ]);
+      showCohortResults(runNum);
+    }
+
+    function downloadDummyExcel() {
+      const csvContent = "data:text/csv;charset=utf-8,Patient_ID,Age,Gender,Current_Advanced_Therapy_Class,Payer,State\n" +
+        "2001,44,F,Anti-integrin,Commercial,CA\n" +
+        "2002,58,M,IL-23_inhibitor,Medicare,NY\n" +
+        "2003,36,F,JAK_inhibitor,Commercial,TX\n" +
+        "2004,51,M,Anti-TNF,Medicaid,FL\n" +
+        "2005,47,F,S1P_modulator,Commercial,IL";
+      const encodedUri = encodeURI(csvContent);
+      const link = document.createElement("a");
+      link.setAttribute("href", encodedUri);
+      link.setAttribute("download", "uc_patient_cohort_export.csv");
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      toast("Cohort data exported.");
+    }
+
+    function showCohortResults(runNum) {
+      STATE.cohortRunNum = runNum;
+      const d = runNum === 1 ? DATA.cohortV1 : DATA.cohortV2;
+      const prev = runNum === 2 ? DATA.cohortV1 : null;
+
+      if (STATE.cohortRuleset) {
+        const demoRule = STATE.cohortRuleset.find(r => r.category === "Demographics");
+        if (demoRule) {
+          const ageMatch = demoRule.text.match(/Age\s*[≥>=]?\s*(\d+)/i) || demoRule.text.match(/(\d+)\s*years/i);
+          if (ageMatch) {
+            const ageStage = d.funnel.find(f => f.label.toLowerCase().includes("age"));
+            if (ageStage) ageStage.label = `Age ≥ ${ageMatch[1]} at index`;
+          }
+        }
+
+        const txRule = STATE.cohortRuleset.find(r => r.category === "Treatment");
+        if (txRule) {
+          const dayMatch = txRule.text.match(/within\s*(\d+)\s*days/i);
+          if (dayMatch) {
+            const txStage = d.funnel.find(f => f.label.toLowerCase().includes("treatment evidence"));
+            if (txStage) txStage.label = `Treatment evidence within ${dayMatch[1]} days`;
+          }
+        }
+      }
+
+      renderStepper(runNum === 1 ? 0 : 1);
+
+      const wrap = h("div");
+      wrap.appendChild(h("div", "panel-eyebrow", "Step 1 · Cohort Definition — " + d.label));
+
+      const titleRow = h("div");
+      titleRow.style.display = "flex";
+      titleRow.style.justifyContent = "space-between";
+      titleRow.style.alignItems = "flex-end";
+      titleRow.style.marginBottom = "16px";
+
+      const titleWrap = h("div");
+      const title = h("div", "panel-title", "Cohort summary");
+      title.style.marginBottom = "4px";
+      const sub = h("div", "panel-subtitle", "High-level view of the qualifying UC patient population, the attrition funnel, and key distributions.");
+      sub.style.marginBottom = "0";
+      titleWrap.appendChild(title);
+      titleWrap.appendChild(sub);
+
+      const exportBtn = h("button", "btn btn-outline", "Export Data");
+      exportBtn.id = "btn-export-cohort-top";
+      exportBtn.style.border = "1px solid var(--primary)";
+      exportBtn.style.color = "var(--primary)";
+      exportBtn.style.background = "transparent";
+      exportBtn.style.padding = "6px 12px";
+      exportBtn.style.borderRadius = "6px";
+      exportBtn.style.fontSize = "13px";
+      exportBtn.style.fontWeight = "600";
+      exportBtn.style.cursor = "pointer";
+      exportBtn.onclick = () => downloadDummyExcel();
+
+      titleRow.appendChild(titleWrap);
+      titleRow.appendChild(exportBtn);
+
+      wrap.appendChild(titleRow);
+
+      const stats = [
+        { label: "Final cohort", value: fmt(d.kpis.total), sub: prev ? "vs " + fmt(prev.kpis.total) + " in initial run" : "patients", delta: prev ? (d.kpis.total < prev.kpis.total ? "▼ " + pct(prev.kpis.total - d.kpis.total, prev.kpis.total) + "%" : "▲") : null, deltaGood: null },
+        { label: "Avg. age", value: d.kpis.avgAge + " yrs", sub: "at index date" },
+        { label: "% Female", value: d.kpis.pctFemale + "%", sub: "of cohort" },
+        { label: "Avg. follow-up", value: d.kpis.avgFollowup + " mo", sub: "post-index" }
+      ];
+      wrap.appendChild(statTiles(stats));
+
+      wrap.appendChild(funnelChart({ title: "Patient attrition funnel", subtitle: "From the full claims population to the final analysis-ready cohort.", stages: d.funnel }));
+
+      const grid = h("div", "chart-grid-2");
+      grid.appendChild(donutChart({ title: "Gender Distribution", data: d.gender, centerLabel: d.gender[0].value.toFixed(0) + "%", centerSub: d.gender[0].label }));
+      const maxAgeObj = d.age.reduce((prev, curr) => (curr.value > prev.value) ? curr : prev, d.age[0]);
+      grid.appendChild(donutChart({
+        title: "Age Distribution",
+        data: d.age.map((a, i) => ({ label: a.label, value: a.value, color: "var(--series-" + (i + 1) + ")" })),
+        centerLabel: maxAgeObj.label,
+        centerSub: "Largest segment"
+      }));
+      grid.appendChild(barChart({ title: "Payer Distribution", unit: "pct", data: d.payer.map((a, i) => ({ label: a.label, value: a.value, color: "var(--series-" + (i + 1) + ")" })) }));
+      grid.appendChild(barChart({ title: "State Distribution", unit: "pct", data: d.state.map((a, i) => ({ label: a.label, value: a.value, color: "var(--series-" + (i + 1) + ")" })) }));
+      wrap.appendChild(grid);
+
+      if (runNum === 1) {
+        if (!STATE.edgeToggles) STATE.edgeToggles = { tightenDx: true, excludeCrohns: true };
+        const callout = h("div", "callout");
+        callout.innerHTML =
+          '<div class="callout-head"><div class="callout-icon">!</div><b>A few edge cases worth a look</b></div>' +
+          '<div style="display:flex; flex-direction:column; gap:16px; margin-bottom:16px;">' +
+          '<div style="display:flex; gap:16px; border-bottom:1px solid rgba(0,0,0,0.05); padding-bottom:12px;">' +
+          '<div style="flex:1; font-size:13px; line-height:1.5;">' +
+          '<b>2,220 patients (5.5%)</b> have their two qualifying diagnosis claims &lt;14 days apart from the same provider visit — often a coding duplicate rather than a confirmed diagnosis.' +
+          '</div>' +
+          '<div style="flex:1; background:rgba(255,255,255,0.6); padding:10px; border-radius:6px; border:1px solid rgba(0,0,0,0.05);">' +
+          '<div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:4px;">' +
+          '<b style="font-size:12px; color:var(--teal-700)">Enhancement</b>' +
+          '<div id="tgl-dx" class="toggle' + (STATE.edgeToggles.tightenDx ? ' on' : '') + '" style="cursor:pointer;"><div class="knob"></div></div>' +
+          '</div>' +
+          '<div style="font-size:12px; line-height:1.4;">Require claims to be ≥30 days apart, from two different provider visits</div>' +
+          '</div>' +
+          '</div>' +
+          '<div style="display:flex; gap:16px; border-bottom:1px solid rgba(0,0,0,0.05); padding-bottom:12px;">' +
+          '<div style="flex:1; font-size:13px; line-height:1.5;">' +
+          '<b>1,290 patients (3.2%)</b> carry a co-occurring Crohn\'s disease diagnosis (ICD-10 K50.x) within 90 days of index — a common source of indeterminate-colitis miscoding.' +
+          '</div>' +
+          '<div style="flex:1; background:rgba(255,255,255,0.6); padding:10px; border-radius:6px; border:1px solid rgba(0,0,0,0.05);">' +
+          '<div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:4px;">' +
+          '<b style="font-size:12px; color:var(--teal-700)">Enhancement</b>' +
+          '<div id="tgl-crohns" class="toggle' + (STATE.edgeToggles.excludeCrohns ? ' on' : '') + '" style="cursor:pointer;"><div class="knob"></div></div>' +
+          '</div>' +
+          '<div style="font-size:12px; line-height:1.4;">Exclude patients with competing Crohn\'s disease diagnosis</div>' +
+          '</div>' +
+          '</div>' +
+          '<div style="font-size:13px; line-height:1.5;">' +
+          '<b>770 patients (1.9%)</b> show a &gt;180 day enrollment gap immediately around index — not clearly actionable, so we\'d leave the enrollment rule as-is.' +
+          '</div>' +
+          '</div>' +
+          '<div class="btn-row">' +
+          '<button class="btn btn-tealsolid" id="btn-accept-tighten">Apply selected tightening & re-run</button>' +
+          '<button class="link-btn" id="btn-manual-adjust">Adjust rules myself</button>' +
+          '<button class="link-btn" id="btn-keep-asis">Keep as-is, continue</button>' +
+          '</div>';
+        wrap.appendChild(callout);
+      } else {
+        const callout = h("div", "callout teal");
+        callout.innerHTML =
+          '<div class="callout-head"><div class="callout-icon">✓</div><b>This looks like a clean, analysis-ready cohort</b></div>' +
+          '<div style="font-size:13px;color:var(--ink-secondary);line-height:1.6;margin-bottom:14px;">Tightening the diagnosis spacing/provider rule and excluding competing Crohn\'s diagnoses removed <b>3,440 patients (‑8.5%)</b> of likely rule-outs and miscoded records, without materially shifting the demographic mix.</div>' +
+          '<div class="btn-row">' +
+          '<button class="btn btn-tealsolid" id="btn-accept-cohort">Accept this cohort & continue</button>' +
+          '</div>';
+        wrap.appendChild(callout);
+      }
+
+      renderPanel(wrap);
+
+      if (runNum === 1) {
+        const tglDx = document.getElementById("tgl-dx");
+        tglDx.onclick = () => {
+          STATE.edgeToggles.tightenDx = !STATE.edgeToggles.tightenDx;
+          tglDx.className = "toggle" + (STATE.edgeToggles.tightenDx ? " on" : "");
+        };
+        const tglCrohns = document.getElementById("tgl-crohns");
+        tglCrohns.onclick = () => {
+          STATE.edgeToggles.excludeCrohns = !STATE.edgeToggles.excludeCrohns;
+          tglCrohns.className = "toggle" + (STATE.edgeToggles.excludeCrohns ? " on" : "");
+        };
+
+        document.getElementById("btn-accept-tighten").onclick = () => acceptTightening();
+        document.getElementById("btn-manual-adjust").onclick = () => {
+          STATE.cohortRuleset = COHORT_RULES_V1();
+          STATE.cohortRuleset = COHORT_RULES_V2_PATCH(STATE.cohortRuleset, STATE.edgeToggles);
+          renderPanel(cohortRulesPanel());
+          toast("Manual editing re-opened — adjust and confirm to re-run.");
+        };
+        document.getElementById("btn-keep-asis").onclick = () => proceedToBusinessQuestion();
+        aiSay("I reviewed the cohort and found a few edge cases worth tightening up — see the callout on the right. Want me to apply the selected rule changes and re-run?", 900).then(() => {
+          setChips([
+            { label: "Apply selected tightening & re-run", primary: true, onClick: acceptTightening },
+            { label: "Keep as-is, continue", muted: true, onClick: proceedToBusinessQuestion }
+          ]);
+          freeTextHandler = acceptTightening;
+        });
+      } else {
+        document.getElementById("btn-accept-cohort").onclick = () => proceedToBusinessQuestion();
+        aiSay("The refined cohort of <b>" + fmt(DATA.cohortV2.kpis.total) + " patients</b> looks solid — tighter diagnosis logic and de-duplication removed likely rule-outs without skewing the demographics. Happy to lock this in?", 900).then(() => {
+          setChips([{ label: "Accept this cohort & continue", primary: true, onClick: proceedToBusinessQuestion }]);
+          freeTextHandler = proceedToBusinessQuestion;
+        });
+      }
+    }
+
+    async function acceptTightening() {
+      setChips([]); freeTextHandler = null;
+      userSay("Apply the suggested tightening and re-run.");
+      STATE.cohortRunNum = 2;
+      STATE.cohortRuleset = COHORT_RULES_V2_PATCH(STATE.cohortRuleset, STATE.edgeToggles);
+      renderPanel(cohortRulesPanel());
+      toast("Review the suggested rule changes (highlighted in teal) and confirm to re-run.");
+    }
+
+    /* ============================================================
+       FLOW: BUSINESS QUESTION
+    ============================================================ */
+    async function proceedToBusinessQuestion() {
+      setChips([]); freeTextHandler = null;
+      renderStepper(2);
+      const finalCohort = STATE.cohortRunNum === 2 ? DATA.cohortV2 : DATA.cohortV1;
+
+      renderBusinessQuestionPromptPanel();
+
+      await aiSay("Great — your UC cohort of <b>" + fmt(finalCohort.kpis.total) + " patients</b> is locked in. What business question would you like to explore next?", 900);
+
+      const scenarioText = "We're advancing Emvistegrast, our oral α4β7 integrin inhibitor, through Phase 2 for moderate-to-severe ulcerative colitis. Before we lock our positioning, I want a simple view of the current UC treatment landscape — who has the market today, how fast is it already shifting toward oral options, how patients combine therapies, and how big the realistic opportunity is for an oral integrin option.";
+
+      setChips([
+        { label: "Describe Emvistegrast positioning scenario", primary: true, onClick: () => handleBusinessQuestionPrompt(scenarioText) }
+      ]);
+      freeTextHandler = (text) => handleBusinessQuestionPrompt(text || scenarioText);
+    }
+
+    function renderBusinessQuestionPromptPanel() {
+      const finalCohort = STATE.cohortRunNum === 2 ? DATA.cohortV2 : DATA.cohortV1;
+      const wrap = h("div");
+      wrap.appendChild(h("div", "panel-eyebrow", "Step 2 · Business Question"));
+      wrap.appendChild(h("div", "panel-title", "What business question would you like to explore next?"));
+      wrap.appendChild(h("div", "panel-subtitle", "Your UC cohort is confirmed. Tell the assistant what you're trying to figure out next."));
+
+      const card = h("div", "card");
+      card.innerHTML = '<div class="card-title">Confirmed cohort</div><div class="card-sub" style="margin-bottom:0;"><b>' + fmt(finalCohort.kpis.total) + '</b> ulcerative colitis patients, indexed Jan 2023–Dec 2025, ready for downstream analysis.</div>';
+      wrap.appendChild(card);
+
+      const scenarioText = "We're advancing Emvistegrast, our oral α4β7 integrin inhibitor, through Phase 2 for moderate-to-severe ulcerative colitis. Before we lock our positioning, I want a simple view of the current UC treatment landscape — who has the market today, how fast is it already shifting toward oral options, how patients combine therapies, and how big the realistic opportunity is for an oral integrin option.";
+
+      const promptCard = h("div", "card");
+      promptCard.style.marginTop = "20px";
+      promptCard.style.padding = "24px";
+      promptCard.style.background = "#ffffff";
+      promptCard.style.border = "1px solid var(--border)";
+      promptCard.style.borderRadius = "12px";
+
+      promptCard.innerHTML = `
+        <div style="display:flex; align-items:center; gap:8px; margin-bottom:12px;">
+          <div style="width:28px; height:28px; border-radius:50%; background:rgba(0,163,155,0.12); display:flex; align-items:center; justify-content:center; color:var(--teal-600); font-weight:700; font-size:13px;">AI</div>
+          <div style="font-weight:700; font-size:14.5px; color:var(--navy-900);">Ask a Business Question</div>
+        </div>
+        <div style="font-size:13px; color:var(--ink-secondary); line-height:1.5; margin-bottom:14px;">
+          Type your business scenario or question below to start the analysis. The assistant will guide you through the relevant metrics.
+        </div>
+        <textarea id="main-prompt-input" rows="4" style="width:100%; padding:14px 16px; font-family:var(--font-sans); font-size:14px; color:var(--navy-900); line-height:1.5; background:#ffffff; border:1.5px solid #cbd5e1; border-radius:8px; outline:none; resize:vertical; box-sizing:border-box; margin-bottom:16px; box-shadow:inset 0 1px 2px rgba(0,0,0,0.04); transition:border-color 0.2s, box-shadow 0.2s;" placeholder="Type your business scenario or question here..." onfocus="this.style.borderColor='var(--teal-600)'; this.style.boxShadow='0 0 0 3px rgba(13,148,136,0.15)';" onblur="this.style.borderColor='#cbd5e1'; this.style.boxShadow='inset 0 1px 2px rgba(0,0,0,0.04)';"></textarea>
+
+        <div style="display:flex; justify-content:flex-end; align-items:center;">
+          <button id="btn-submit-main-prompt" class="btn btn-tealsolid" style="padding:10px 20px; font-size:13.5px; font-weight:600; cursor:pointer;">
+            Submit Question &rarr;
+          </button>
+        </div>
+      `;
+
+      wrap.appendChild(promptCard);
+      renderPanel(wrap);
+
+      const txtArea = document.getElementById("main-prompt-input");
+
+      document.getElementById("btn-submit-main-prompt").onclick = () => {
+        const val = txtArea.value.trim();
+        handleBusinessQuestionPrompt(val || scenarioText);
+      };
+    }
+
+    async function handleBusinessQuestionPrompt(customPrompt) {
+      setChips([]); freeTextHandler = null;
+      const scenarioText = "We're advancing Emvistegrast, our oral α4β7 integrin inhibitor, through Phase 2 for moderate-to-severe ulcerative colitis. Before we lock our positioning, I want a simple view of the current UC treatment landscape — who has the market today, how fast is it already shifting toward oral options, how patients combine therapies, and how big the realistic opportunity is for an oral integrin option.";
+      const prompt = customPrompt || scenarioText;
+      userSay(prompt);
+
+      await aiSay("Got it — let's keep this simple and story-driven rather than a deep clinical-sequencing exercise. A <b>Treatment Landscape &amp; Market Opportunity analysis</b> will show: who has the market today by individual drug, how fast the market is already shifting from injectables to oral options, how patients combine therapies, a simple look at where new oral starts come from, and a sizing of the realistic potential market for Emvistegrast. Let's set that up.", 1100);
+
+      startAnalysisFlow("landscape");
+    }
+
+    /* ============================================================
+       FLOW: DEEP-DIVE ANALYSIS (Treatment Landscape & Market Opportunity)
+    ============================================================ */
+    function getAnalysisRules(key) {
+      if (!STATE["rules_" + key]) {
+        STATE["rules_" + key] = ANALYSIS_META[key].rules();
+      }
+      return STATE["rules_" + key];
+    }
+
+    function syncEdgeTogglesToRules(key) {
+      const rules = getAnalysisRules(key);
+      const tg = STATE["edgeToggles_" + key] || { t1: true, t2: true, t3: true };
+
+      const updateRule = (category, text, active) => {
+        let r = rules.find(x => x.text === text);
+        if (!r) {
+          rules.push({ id: cid(), category: category, text: text, active: active, isSuggestion: true });
+        } else {
+          r.active = active;
+        }
+      };
+
+      updateRule("Route Classification", "Treat Entyvio IV→SC formulation changes as a continuation within the injectable route, not a route switch", tg.t1);
+      updateRule("Exclusion", "Exclude overlapping oral + injectable fills lasting <14 days from combination-therapy and route-switch classification (bridge/sample fill)", tg.t2);
+      updateRule("Exclusion", "Require at least two claims for a new oral advanced therapy within 90 days to confirm an oral start", tg.t3);
+      return rules;
+    }
+
+    function applyTightenedRules(key) {
+      STATE["tightened_" + key] = true;
+      const rules = syncEdgeTogglesToRules(key);
+      renderPanel(analysisRulesPanel(key, rules));
+      toast("Review the new suggested rules (highlighted in teal) and confirm to re-run.");
+    }
+
+    async function startAnalysisFlow(key) {
+      setChips([]); freeTextHandler = null;
+      renderStepper(3);
+      const meta = ANALYSIS_META[key];
+
+      await aiSay(meta.ackText, 900);
+      const rulesArr = getAnalysisRules(key);
+      renderPanel(analysisRulesPanel(key, rulesArr));
+    }
+
+    function analysisRulesPanel(key, rulesArr) {
+      const meta = ANALYSIS_META[key];
+      const wrap = h("div");
+      wrap.appendChild(h("div", "panel-eyebrow", "Step 3 · Deep-Dive Analysis"));
+      wrap.appendChild(h("div", "panel-title", meta.label + " — business rules"));
+      wrap.appendChild(h("div", "panel-subtitle", "How every advanced-therapy claim gets classified by drug, route, and combination status, and how we size the potential oral-integrin opportunity."));
+
+      wrap.appendChild(rulesEditorCard(
+        "Suggested business rules — " + meta.label,
+        "AI-suggested starting point for this analysis. Add, edit, or disable rules to match your definition.",
+        rulesArr,
+        (activeRules) => handleConfirmRulesAndPreview(activeRules),
+        "Confirm rules & preview on sample patients",
+        false
+      ));
+      return wrap;
+    }
+
+    async function handleConfirmRulesAndPreview(activeRules) {
+      setChips([]); freeTextHandler = null;
+      const wrap = h("div");
+      wrap.appendChild(h("div", "panel-eyebrow", "Step 3 · Deep-Dive Analysis — Treatment Landscape"));
+      wrap.appendChild(h("div", "panel-title", "Sampling patient claims & testing business rules…"));
+      wrap.appendChild(h("div", "panel-subtitle", "Drawing sample patient claims to verify route, combination, and oral-sequencing logic before running on the complete database."));
+
+      const loaderCard = h("div", "card");
+      loaderCard.style.padding = "44px 20px";
+      loaderCard.style.textAlign = "center";
+      loaderCard.innerHTML = `
+        <div class="spinner" style="margin:0 auto 16px; border:3px solid var(--border); border-top-color:var(--teal-600); width:32px; height:32px; border-radius:50%; animation:spin 0.8s linear infinite;"></div>
+        <div style="font-size:14px; font-weight:700; color:var(--navy-900);">Classifying sample patients by route, combination, and sequencing…</div>
+        <div style="font-size:12px; color:var(--ink-muted); margin-top:4px;">Evaluating business rules against sample advanced-therapy claim episodes</div>
+      `;
+      wrap.appendChild(loaderCard);
+      renderPanel(wrap);
+
+      await sleep(900);
+
+      renderSamplePreviewPanel(activeRules);
+    }
+
+    function renderSamplePreviewPanel(activeRules) {
+      setChips([]); freeTextHandler = null;
+      const wrap = h("div");
+      wrap.appendChild(h("div", "panel-eyebrow", "STEP 3 · DEEP-DIVE ANALYSIS — TREATMENT LANDSCAPE"));
+      wrap.appendChild(h("div", "panel-title", "Sample preview — does the logic look right?"));
+      wrap.appendChild(h("div", "panel-subtitle", "These sample patients are drawn from a random sample of claims data, so we can sanity-check the rules before running them against the complete claims database — shown as each patient's advanced-therapy claim history, route, and combination flags."));
+
+      const containerCard = h("div", "card");
+      containerCard.appendChild(h("div", "card-title", "Sample patients, classified by the rules above"));
+      containerCard.appendChild(h("div", "card-sub", "Three examples: an oral-naive start, an oral switch from an injectable, and a combination-therapy flag."));
+
+      const samplesList = h("div");
+      samplesList.style.marginTop = "16px";
+      samplesList.innerHTML = `
+        <!-- PT-10482 -->
+        <div style="border:1px solid var(--border); border-radius:10px; padding:18px 20px; margin-bottom:16px; background:#fff;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+            <div style="font-weight:700; font-size:15px; color:var(--navy-900); display:flex; align-items:center; gap:10px;">
+              PT-10482
+              <span style="background:#10b981; color:#fff; font-size:10px; font-weight:800; padding:2px 10px; border-radius:12px; letter-spacing:0.4px;">ORAL START — NAIVE</span>
+            </div>
+          </div>
+          <div style="font-size:12px; color:var(--ink-muted); margin-bottom:14px;">
+            Prior therapy: <b style="color:var(--navy-900);">Mesalamine (5-ASA), 2023-09-05 to 2024-03-10</b> &nbsp;&nbsp; Advanced-therapy claim under evaluation (index date): <b style="color:var(--navy-900);">2024-03-14 (Zeposia)</b>
+          </div>
+          <table style="width:100%; border-collapse:collapse; font-size:12px; margin-bottom:12px;">
+            <thead>
+              <tr style="border-bottom:1px solid var(--border); text-align:left; color:var(--ink-muted); font-size:10.5px; font-weight:700; text-transform:uppercase; letter-spacing:0.4px;">
+                <th style="padding:6px 10px;">CLAIM EPISODE</th>
+                <th style="padding:6px 10px;">ROUTE</th>
+                <th style="padding:6px 10px;">START DATE</th>
+                <th style="padding:6px 10px;">END DATE</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style="padding:10px; color:var(--ink-primary);">Mesalamine (5-ASA)</td>
+                <td style="padding:10px; color:var(--ink-secondary);">Conventional</td>
+                <td style="padding:10px; color:var(--ink-secondary);">2023-09-05</td>
+                <td style="padding:10px; color:var(--ink-secondary);">2024-03-10</td>
+              </tr>
+              <tr style="background:#f0fdf4;">
+                <td style="padding:10px; font-weight:700; color:var(--navy-900); border-left:3px solid #10b981;">ZEPOSIA</td>
+                <td style="padding:10px; color:var(--ink-secondary);">Oral</td>
+                <td style="padding:10px; color:var(--ink-secondary);">2024-03-14</td>
+                <td style="padding:10px; font-weight:600; color:var(--navy-900);">Ongoing</td>
+              </tr>
+            </tbody>
+          </table>
+          <div style="border:1px solid #10b981; background:#f0fdf4; border-radius:8px; padding:10px 14px; font-size:12.5px; color:#065f46; display:flex; align-items:center; gap:8px;">
+            <span style="background:#10b981; color:#fff; font-size:9.5px; font-weight:800; padding:2px 6px; border-radius:4px; flex-shrink:0;">FLAG</span>
+            <span><b>Oral Start — Advanced-Therapy Naive</b> — No advanced-therapy claim of any kind in the 12-month lookback — Zeposia is the patient's first advanced-therapy start.</span>
+          </div>
+        </div>
+
+        <!-- PT-30556 -->
+        <div style="border:1px solid var(--border); border-radius:10px; padding:18px 20px; margin-bottom:16px; background:#fff;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+            <div style="font-weight:700; font-size:15px; color:var(--navy-900); display:flex; align-items:center; gap:10px;">
+              PT-30556
+              <span style="background:#2563eb; color:#fff; font-size:10px; font-weight:800; padding:2px 10px; border-radius:12px; letter-spacing:0.4px;">ORAL START — SWITCHED FROM INJECTABLE</span>
+            </div>
+          </div>
+          <div style="font-size:12px; color:var(--ink-muted); margin-bottom:14px;">
+            Prior therapy: <b style="color:var(--navy-900);">Humira (SC), 2021-08-20 to 2024-04-30</b> &nbsp;&nbsp; Advanced-therapy claim under evaluation (index date): <b style="color:var(--navy-900);">2024-06-30 (Rinvoq)</b>
+          </div>
+          <table style="width:100%; border-collapse:collapse; font-size:12px; margin-bottom:12px;">
+            <thead>
+              <tr style="border-bottom:1px solid var(--border); text-align:left; color:var(--ink-muted); font-size:10.5px; font-weight:700; text-transform:uppercase; letter-spacing:0.4px;">
+                <th style="padding:6px 10px;">CLAIM EPISODE</th>
+                <th style="padding:6px 10px;">ROUTE</th>
+                <th style="padding:6px 10px;">START DATE</th>
+                <th style="padding:6px 10px;">END DATE</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style="padding:10px; color:var(--ink-primary);">Humira</td>
+                <td style="padding:10px; color:var(--ink-secondary);">Subcutaneous</td>
+                <td style="padding:10px; color:var(--ink-secondary);">2021-08-20</td>
+                <td style="padding:10px; color:var(--ink-secondary);">2024-04-30</td>
+              </tr>
+              <tr style="background:#eff6ff;">
+                <td style="padding:10px; font-weight:700; color:var(--navy-900); border-left:3px solid #2563eb;">RINVOQ</td>
+                <td style="padding:10px; color:var(--ink-secondary);">Oral</td>
+                <td style="padding:10px; color:var(--ink-secondary);">2024-06-30</td>
+                <td style="padding:10px; font-weight:600; color:var(--navy-900);">Ongoing</td>
+              </tr>
+            </tbody>
+          </table>
+          <div style="border:1px solid #2563eb; background:#eff6ff; border-radius:8px; padding:10px 14px; font-size:12.5px; color:#1e40af; display:flex; align-items:center; gap:8px;">
+            <span style="background:#2563eb; color:#fff; font-size:9.5px; font-weight:800; padding:2px 6px; border-radius:4px; flex-shrink:0;">FLAG</span>
+            <span><b>Oral Start — Switched from Injectable (Humira, SC)</b> — Rinvoq claim within 90 days of Humira's supply end, with no further Humira claim afterward.</span>
+          </div>
+        </div>
+
+        <!-- PT-20117 -->
+        <div style="border:1px solid var(--border); border-radius:10px; padding:18px 20px; margin-bottom:16px; background:#fff;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+            <div style="font-weight:700; font-size:15px; color:var(--navy-900); display:flex; align-items:center; gap:10px;">
+              PT-20117
+              <span style="background:#eda100; color:#fff; font-size:10px; font-weight:800; padding:2px 10px; border-radius:12px; letter-spacing:0.4px;">COMBINATION THERAPY</span>
+            </div>
+          </div>
+          <div style="font-size:12px; color:var(--ink-muted); margin-bottom:14px;">
+            Advanced therapy: <b style="color:var(--navy-900);">Stelara (SC), starting 2023-11-01, ongoing</b> &nbsp;&nbsp; Concurrent claim under evaluation: <b style="color:var(--navy-900);">Azathioprine, 2023-11-08 to present</b>
+          </div>
+          <table style="width:100%; border-collapse:collapse; font-size:12px; margin-bottom:12px;">
+            <thead>
+              <tr style="border-bottom:1px solid var(--border); text-align:left; color:var(--ink-muted); font-size:10.5px; font-weight:700; text-transform:uppercase; letter-spacing:0.4px;">
+                <th style="padding:6px 10px;">CLAIM EPISODE</th>
+                <th style="padding:6px 10px;">ROUTE</th>
+                <th style="padding:6px 10px;">START DATE</th>
+                <th style="padding:6px 10px;">END DATE</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style="padding:10px; color:var(--ink-primary);">STELARA</td>
+                <td style="padding:10px; color:var(--ink-secondary);">Subcutaneous</td>
+                <td style="padding:10px; color:var(--ink-secondary);">2023-11-01</td>
+                <td style="padding:10px; font-weight:600; color:var(--navy-900);">Ongoing</td>
+              </tr>
+              <tr style="background:#fffbeb;">
+                <td style="padding:10px; font-weight:700; color:var(--navy-900); border-left:3px solid #eda100;">Azathioprine</td>
+                <td style="padding:10px; color:var(--ink-secondary);">Immunomodulator</td>
+                <td style="padding:10px; color:var(--ink-secondary);">2023-11-08</td>
+                <td style="padding:10px; font-weight:600; color:var(--navy-900);">Ongoing</td>
+              </tr>
+            </tbody>
+          </table>
+          <div style="border:1px solid #eda100; background:#fffbeb; border-radius:8px; padding:10px 14px; font-size:12.5px; color:#78350f; display:flex; align-items:center; gap:8px;">
+            <span style="background:#eda100; color:#fff; font-size:9.5px; font-weight:800; padding:2px 6px; border-radius:4px; flex-shrink:0;">FLAG</span>
+            <span><b>Combination Therapy</b> — Concurrent immunomodulator claim overlapping the advanced-therapy claim by more than 60 days, so this counts as combination therapy, not monotherapy.</span>
+          </div>
+        </div>
+      `;
+
+      containerCard.appendChild(samplesList);
+      wrap.appendChild(containerCard);
+
+      const bottomConfirmCard = h("div", "card");
+      bottomConfirmCard.style.marginTop = "20px";
+      bottomConfirmCard.style.padding = "20px";
+      bottomConfirmCard.innerHTML = `
+        <div style="font-weight:700; font-size:15px; color:var(--navy-900); margin-bottom:4px;">Do the rules and these examples look right?</div>
+        <div style="font-size:13px; color:var(--ink-secondary); margin-bottom:16px;">If so, we'll run the same classification logic against the complete claims dataset.</div>
+        <div style="display:flex; align-items:center; gap:16px;">
+          <button class="btn btn-tealsolid" id="btn-confirm-complete-claims" style="font-weight:600; padding:10px 18px; font-size:13.5px; cursor:pointer;">Confirm & run on complete claims</button>
+          <button id="btn-back-to-sob-rules" style="background:none; border:none; color:var(--teal-700); font-weight:600; font-size:13.5px; cursor:pointer; text-decoration:none;">← Back to rules</button>
+        </div>
+      `;
+      wrap.appendChild(bottomConfirmCard);
+
+      renderPanel(wrap);
+
+      document.getElementById("btn-confirm-complete-claims").onclick = () => {
+        userSay("Confirm & run on complete claims.");
+        runAnalysis("landscape");
+      };
+
+      document.getElementById("btn-back-to-sob-rules").onclick = () => {
+        renderPanel(analysisRulesPanel("landscape", getAnalysisRules("landscape")));
+      };
+
+      aiSay("All three look right: a clean oral-naive start, an injectable-to-oral switch, and a correctly flagged combination-therapy case. These are built from a sample of claims data to confirm the rules work as intended — if they look good to you, I'll run this same logic against the complete claims dataset.", 900);
+      setChips([
+        { label: "Confirm & run on complete claims.", primary: true, onClick: () => { userSay("Confirm & run on complete claims."); runAnalysis("landscape"); } }
+      ]);
+      freeTextHandler = () => { userSay("Confirm & run on complete claims."); runAnalysis("landscape"); };
+    }
+
+    async function runAnalysis(key) {
+      setChips([]); freeTextHandler = null;
+      const meta = ANALYSIS_META[key];
+      const wrap = h("div");
+      wrap.appendChild(h("div", "panel-eyebrow", "STEP 3 · DEEP-DIVE ANALYSIS — TREATMENT LANDSCAPE"));
+      wrap.appendChild(h("div", "panel-title", "Running " + meta.label.toLowerCase() + "…"));
+      renderPanel(wrap);
+      await runPipeline(wrap, meta.pipeline);
+      if (!STATE.completedAnalyses.includes(key)) STATE.completedAnalyses.push(key);
+      showAnalysisResults(key);
+    }
+
+    /* ============================================================
+       LANDSCAPE RESULT VIEWS — five simple, story-driven charts
+    ============================================================ */
+    function drugShareBarChart() {
+      const drugs = DATA.landscape.drugs;
+      const routeTag = (r) => r === "oral" ? " (Oral)" : r === "iv" ? " (IV)" : r === "sc" ? " (SC)" : " (IV/SC)";
+      return barChart({
+        title: "Treatment Share by Drug",
+        subtitle: "Active advanced-therapy patients within the confirmed UC cohort, by individual drug. Oral options are tagged for quick reference.",
+        showPct: true,
+        data: drugs.map(d => ({ label: d.name + " — " + d.class + routeTag(d.route), value: d.active, color: d.color }))
+      });
+    }
+
+    function routeMixStackedBarChart() {
+      const card = h("div", "card");
+      card.style.padding = "24px";
+      card.style.marginBottom = "16px";
+      const rows = DATA.landscape.quarterlyRouteMix;
+      const legend = [
+        { key: "oral", label: "Oral", color: "#1baf7a" },
+        { key: "iv", label: "Intravenous", color: "#94a3b8" },
+        { key: "sc", label: "Subcutaneous", color: "#2a78d6" }
+      ];
+      card.innerHTML = `
+        <div style="font-weight:700; font-size:16px; color:var(--navy-900); margin-bottom:4px;">Oral vs. IV vs. Subcutaneous Mix, New Starts</div>
+        <div style="font-size:12.5px; color:var(--ink-muted); margin-bottom:18px;">By quarter, % of new advanced-therapy starts within the confirmed UC cohort, by administration route.</div>
+        <div style="display:flex; flex-wrap:wrap; gap:18px; margin-bottom:24px; font-size:12px; font-weight:600; color:var(--ink-secondary);">
+          ${legend.map(l => `<div style="display:flex; align-items:center; gap:6px;"><span style="width:12px; height:12px; border-radius:3px; background:${l.color}; display:inline-block;"></span> ${l.label}</div>`).join("")}
+        </div>
+        <div style="display:grid; grid-template-columns:repeat(${rows.length}, 1fr); gap:12px; height:300px; border-bottom:1px solid var(--border); padding-bottom:32px; position:relative;">
+          ${rows.map(d => `
+            <div style="display:flex; flex-direction:column; height:100%; position:relative;">
+              <div style="display:flex; flex-direction:column; flex:1; width:100%; border-radius:4px; overflow:hidden;">
+                ${legend.map(l => `<div onmouseover="showTooltip(event, '<b>${d.q}: ${l.label}</b><br>${d[l.key]}% of new starts')" onmousemove="moveTooltip(event)" onmouseout="hideTooltip()" style="height:${d[l.key]}%; background:${l.color}; color:#fff; font-size:11px; font-weight:700; display:flex; align-items:center; justify-content:center; cursor:pointer;">${d[l.key]}%</div>`).join("")}
+              </div>
+              <div style="position:absolute; bottom:-28px; width:100%; text-align:center; font-size:11.5px; font-weight:600; color:var(--ink-muted);">${d.q}</div>
+            </div>
+          `).join("")}
+        </div>
+      `;
+      return card;
+    }
+
+    function routeMixCalloutCard() {
+      const el = h("div");
+      el.style.cssText = "border:1px solid #bbf7d0; background:#f0fdf4; border-radius:10px; padding:16px 20px; margin-bottom:24px; display:flex; align-items:center; gap:14px;";
+      el.innerHTML = `
+        <div style="width:26px; height:26px; border-radius:50%; background:#059669; color:#fff; font-weight:800; font-size:13px; display:flex; align-items:center; justify-content:center; flex-shrink:0;">i</div>
+        <div>
+          <div style="font-weight:700; font-size:14px; color:#065f46; margin-bottom:3px;">Oral has nearly tripled its share of new starts</div>
+          <div style="font-size:13px; color:#047857; line-height:1.4;">Oral's share of new advanced-therapy starts has grown from <b>12% to 37%</b> since Q1-23 — even before an oral integrin option is available.</div>
+        </div>
+      `;
+      return el;
+    }
+
+    function oralSequencingCard() {
+      const card = h("div", "card");
+      const s = DATA.landscape.oralSequencing;
+      card.appendChild(h("div", "card-title", "Where New Oral Starts Come From"));
+      card.appendChild(h("div", "card-sub", "Of patients newly starting an oral advanced therapy, how many were new to advanced therapy vs. switching over from an injectable (IV or SC)."));
+      card.appendChild(statTiles([
+        { label: "NEW ORAL STARTS", value: fmt(s.newOralStarts), sub: "in the observation window" },
+        { label: "ADVANCED-THERAPY NAIVE → ORAL", value: s.naivePct + "%", sub: "oral as first advanced therapy" },
+        { label: "SWITCHED FROM INJECTABLE → ORAL", value: s.switchedPct + "%", sub: "came from an IV/SC therapy" },
+        { label: "AVG. TIME ON INJECTABLE BEFORE SWITCH", value: s.avgMonthsOnInjectableBeforeSwitch + " mo", sub: "prior to the oral switch" }
+      ]));
+      return card;
+    }
+
+    function opportunityBuildCard() {
+      const card = h("div", "card");
+      const opp = DATA.landscape.opportunity;
+      card.style.padding = "28px 32px";
+      const segsHtml = opp.segments.map(s => {
+        const wPct = (s.value / opp.total * 100).toFixed(1);
+        return `<div onmouseover="showTooltip(event, '<b>${s.label}</b><br>${fmt(s.value)} patients (${wPct}%)')" onmousemove="moveTooltip(event)" onmouseout="hideTooltip()" style="height:100%; width:${wPct}%; background:${s.color}; display:flex; align-items:center; justify-content:center; color:#fff; font-size:12px; font-weight:700; cursor:pointer;">${wPct}%</div>`;
+      }).join("");
+      const legendHtml = opp.segments.map(s => `
+        <div style="display:flex; align-items:center; gap:10px; padding:10px 0; border-bottom:1px solid var(--border-light);">
+          <span style="width:12px; height:12px; border-radius:3px; background:${s.color}; flex-shrink:0;"></span>
+          <span style="flex:1; font-size:13px; color:var(--ink-secondary);">${s.label}</span>
+          <span style="font-weight:700; font-size:13px; color:var(--ink-primary);">${fmt(s.value)}</span>
+        </div>
+      `).join("");
+      card.innerHTML = `
+        <div class="card-title">Potential Market for Oral</div>
+        <div class="card-sub">A build-up of the realistic near-term opportunity for an oral integrin option, drawn from today's UC advanced-therapy population.</div>
+        <div style="font-size:34px; font-weight:800; color:var(--navy-900); margin:10px 0 18px;">${fmt(opp.total)} <span style="font-size:14px; font-weight:600; color:var(--ink-muted);">patients</span></div>
+        <div style="display:flex; width:100%; height:34px; border-radius:8px; overflow:hidden; margin-bottom:18px;">${segsHtml}</div>
+        <div>${legendHtml}</div>
+      `;
+      return card;
+    }
+
+    function landscapeResultsBlock() {
+      const frag = document.createDocumentFragment();
+      frag.appendChild(drugShareBarChart());
+      frag.appendChild(routeMixStackedBarChart());
+      frag.appendChild(routeMixCalloutCard());
+      frag.appendChild(oralSequencingCard());
+      frag.appendChild(opportunityBuildCard());
+      return frag;
+    }
+
+    function showAnalysisResults(key) {
+      renderStepper(3);
+      const wrap = h("div");
+      wrap.appendChild(h("div", "panel-eyebrow", "Step 3 · Deep-Dive Analysis"));
+      wrap.appendChild(h("div", "panel-title", ANALYSIS_META[key].label + " — results"));
+
+      wrap.appendChild(landscapeResultsBlock());
+
+      const tightened = STATE["tightened_" + key];
+      let cases = [];
+      if (!tightened) {
+        if (!STATE["edgeToggles_" + key]) {
+          STATE["edgeToggles_" + key] = { t1: true, t2: true, t3: true };
+        }
+        cases = [
+          { text: '<b>540 patients (2.4%)</b> have an Entyvio claim that changed from IV to SC formulation of the same drug — not a true route change, and could be miscounted as leaving the injectable route entirely.', rule: 'Treat Entyvio IV→SC formulation changes as a continuation within the injectable route, not a route switch', id: 't1' },
+          { text: '<b>410 patients (1.8%)</b> have overlapping oral and injectable advanced-therapy claims lasting &lt;14 days — likely a bridge/sample fill rather than true combination therapy or a route switch.', rule: 'Exclude overlapping oral + injectable fills lasting <14 days from combination-therapy and route-switch classification (bridge/sample fill)', id: 't2' },
+          { text: '<b>290 patients (1.3%)</b> have a single oral advanced-therapy claim with no subsequent refill — potentially a trial fill or data lag rather than a confirmed oral start.', rule: 'Require at least two claims for a new oral advanced therapy within 90 days to confirm an oral start', id: 't3' }
+        ];
+
+        const callout = h("div", "callout");
+        let html = '<div class="callout-head"><div class="callout-icon">!</div><b>A few edge cases worth a look</b></div>';
+        html += '<div style="display:flex; flex-direction:column; gap:16px; margin-bottom:16px;">';
+        cases.forEach(c => {
+          html += '<div style="display:flex; gap:16px; border-bottom:1px solid rgba(0,0,0,0.05); padding-bottom:12px;">' +
+            '<div style="flex:1; font-size:13px; line-height:1.5;">' + c.text + '</div>' +
+            '<div style="flex:1; background:rgba(255,255,255,0.6); padding:10px; border-radius:6px; border:1px solid rgba(0,0,0,0.05);">' +
+            '<div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:4px;">' +
+            '<b style="font-size:12px; color:var(--teal-700)">Enhancement</b>' +
+            '<div id="tgl-landscape-' + c.id + '" class="toggle' + (STATE["edgeToggles_" + key][c.id] ? ' on' : '') + '" style="cursor:pointer;"><div class="knob"></div></div>' +
+            '</div>' +
+            '<div style="font-size:12px; line-height:1.4;">' + c.rule + '</div>' +
+            '</div>' +
+            '</div>';
+        });
+        html += '</div>';
+        html += '<div class="btn-row">' +
+          '<button class="btn btn-tealsolid" id="btn-analysis-tighten">Apply selected tightening &amp; re-run</button>' +
+          '<button class="link-btn" id="btn-analysis-adjust">Adjust rules myself</button>' +
+          '<button class="link-btn" id="btn-analysis-keep">Keep as-is, continue</button>' +
+          '</div>';
+        callout.innerHTML = html;
+        wrap.appendChild(callout);
+      }
+
+      const nextCard = h("div", "card");
+      if (tightened) {
+        nextCard.innerHTML = '<div class="card-title">Analysis complete</div><div class="card-sub" style="margin-bottom:14px;">The treatment landscape view is ready. Generate a combined summary tying it back to Emvistegrast\'s positioning question?</div>';
+        const row = h("div", "btn-row");
+        const b = h("button", "btn btn-tealsolid", "Generate market understanding summary");
+        b.onclick = () => { userSay("Generate a combined summary."); showFinalSummary(); };
+        row.appendChild(b);
+        nextCard.appendChild(row);
+      } else {
+        nextCard.innerHTML = '<div class="card-title">Almost there</div><div class="card-sub" style="margin-bottom:0;">Review the edge cases above, then continue to the combined summary.</div>';
+      }
+      wrap.appendChild(nextCard);
+      renderPanel(wrap);
+
+      if (!tightened) {
+        cases.forEach(c => {
+          const el = document.getElementById("tgl-landscape-" + c.id);
+          el.onclick = () => {
+            STATE["edgeToggles_" + key][c.id] = !STATE["edgeToggles_" + key][c.id];
+            el.className = "toggle" + (STATE["edgeToggles_" + key][c.id] ? " on" : "");
+          };
+        });
+
+        document.getElementById("btn-analysis-tighten").onclick = () => {
+          userSay("Apply the selected tightening and re-run the " + ANALYSIS_META[key].label.toLowerCase() + ".");
+          applyTightenedRules(key);
+        };
+        document.getElementById("btn-analysis-adjust").onclick = () => {
+          const rules = syncEdgeTogglesToRules(key);
+          renderPanel(analysisRulesPanel(key, rules));
+          toast("Manual editing re-opened — adjust and confirm to re-run.");
+        };
+        document.getElementById("btn-analysis-keep").onclick = () => {
+          STATE["tightened_" + key] = true;
+          showAnalysisResults(key);
+        };
+
+        aiSay("Treatment landscape is done — see treatment share by drug, the oral vs. injectable shift, combination patterns, and the potential market sizing below. I found a few edge cases worth reviewing — see the callout on the right.", 1000).then(() => {
+          setChips([
+            { label: "Apply selected tightening & re-run", primary: true, onClick: () => { userSay("Apply the selected tightening and re-run."); applyTightenedRules(key); } },
+            { label: "Keep as-is, continue", muted: true, onClick: () => { STATE["tightened_" + key] = true; showAnalysisResults(key); } }
+          ]);
+          freeTextHandler = () => { userSay("Apply the selected tightening and re-run."); applyTightenedRules(key); };
+        });
+      } else {
+        aiSay("The tightened result set looks clean and ready for the combined summary.", 900).then(() => {
+          setChips([{ label: "Generate market understanding summary", primary: true, onClick: () => { userSay("Generate a combined summary."); showFinalSummary(); } }]);
+          freeTextHandler = () => showFinalSummary();
+        });
+      }
+    }
+
+    /* ============================================================
+       FINAL SUMMARY
+    ============================================================ */
+    async function showFinalSummary() {
+      setChips([]); freeTextHandler = null;
+      renderStepper(4);
+
+      const wrap = h("div");
+      wrap.appendChild(h("div", "panel-eyebrow", "Step 4 · Summary"));
+      wrap.appendChild(h("div", "panel-title", "Putting it together"));
+      wrap.appendChild(h("div", "panel-subtitle", "A synthesized view across cohort and treatment-landscape findings — tied back to Emvistegrast's Phase 2 positioning question."));
+
+      const hero = h("div", "final-hero");
+      hero.innerHTML = `<h3>What does the UC treatment landscape mean for Emvistegrast's positioning?</h3><p>Entyvio still leads the advanced-therapy market at roughly a quarter of active patients, but the market is already moving toward convenience: oral's share of new advanced-therapy starts has grown from <b>12% to 37%</b> since Q1-23 — nearly tripling in two and a half years, before an oral integrin option even exists. Within that shift, <b>39% of new oral starts</b> are patients actively switching off an injectable therapy, not just treatment-naive patients defaulting to a pill. Combining a stable Entyvio base ready to convert, new starts likely to prefer oral, and injectable-fatigue switchers from other classes, we estimate a realistic near-term opportunity of <b>5,630 patients</b> for an oral integrin option like Emvistegrast.</p>`;
+      wrap.appendChild(hero);
+
+      const recap = h("div", "recap-grid");
+      recap.innerHTML =
+        '<div class="recap-card"><div class="rc-title">Cohort</div><div class="rc-value">' + fmt(DATA.cohortV2.kpis.total) + '</div><div class="rc-sub">confirmed UC patients, Jan 2023–Dec 2025</div></div>' +
+        '<div class="recap-card"><div class="rc-title">Oral Share of New Starts</div><div class="rc-value">12% → 37%</div><div class="rc-sub">nearly tripled since Q1-23</div></div>' +
+        '<div class="recap-card"><div class="rc-title">Potential Market</div><div class="rc-value">' + fmt(DATA.landscape.opportunity.total) + '</div><div class="rc-sub">near-term opportunity for an oral integrin option</div></div>';
+      wrap.appendChild(recap);
+
+      const cd = STATE.cohortRunNum === 2 ? DATA.cohortV2 : DATA.cohortV1;
+      let sectionNum = 1;
+
+      const sec1 = h("div", "summary-section");
+      sec1.appendChild(h("h3", "section-header", (sectionNum++) + ". Patient Cohort Construction"));
+      sec1.appendChild(funnelChart({ title: "Patient attrition funnel", subtitle: "From the full claims population to the final cohort.", stages: cd.funnel }));
+      wrap.appendChild(sec1);
+
+      const sec2 = h("div", "summary-section");
+      sec2.appendChild(h("h3", "section-header", (sectionNum++) + ". Treatment Landscape & Market Opportunity"));
+      sec2.appendChild(landscapeResultsBlock());
+      wrap.appendChild(sec2);
+
+      const card = h("div", "card");
+      card.innerHTML = `<div class="card-title">Suggested next steps</div><ul style="font-size:13px;color:var(--ink-secondary);line-height:1.7;padding-left:20px;margin:0;">` +
+        `<li>Track whether oral's new-start share keeps climbing through Emvistegrast's Phase 2 readout — the faster it moves, the stronger the case for launch timing.</li>` +
+        `<li>Segment the convenience-switch candidate pool by payer to understand prior-authorization friction for a first-in-class oral integrin option.</li>` +
+        `<li>Benchmark Emvistegrast's likely uptake curve against other recent oral UC launches (Rinvoq, Zeposia, Velsipity) in their first 6–8 quarters.</li>` +
+        `</ul>`;
+      wrap.appendChild(card);
+
+      const btnRow = h("div", "btn-row");
+      const exportBtn = h("button", "btn btn-tealsolid", "Export summary (PDF)");
+      exportBtn.onclick = () => toast("This is a demo — export isn't wired up, but in-product this generates a shareable PDF/PPT.");
+      const restartBtn = h("button", "btn btn-outline", "Start a new analysis");
+      restartBtn.onclick = () => { if (confirm("Restart the demo from the landing page?")) location.reload(); };
+      btnRow.appendChild(exportBtn); btnRow.appendChild(restartBtn);
+      wrap.appendChild(btnRow);
+
+      renderPanel(wrap);
+      await aiSay("Here's the combined picture across cohort and treatment-landscape findings — see the summary on the right. Want me to export this, or start a new analysis?", 1000);
+      setChips([
+        { label: "Export summary (PDF)", primary: true, onClick: () => toast("This is a demo — export isn't wired up, but in-product this generates a shareable PDF/PPT.") },
+        { label: "Start a new analysis", muted: true, onClick: () => { if (confirm("Restart the demo from the landing page?")) location.reload(); } }
+      ]);
+    }
+  </script>
+
+  <div id="confirm-modal-overlay"
+    style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:9999; align-items:center; justify-content:center;">
+    <div class="confirm-modal"
+      style="background:#fff; border-radius:12px; width:600px; max-width:90vw; padding:24px; box-shadow:0 10px 25px rgba(0,0,0,0.2);">
+      <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:20px;">
+        <div style="display:flex; gap:12px; align-items:center;">
+          <div
+            style="width:40px; height:40px; border-radius:8px; background:#fff2e5; display:flex; align-items:center; justify-content:center; color:var(--accent);">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+              <line x1="12" y1="9" x2="12" y2="13"></line>
+              <line x1="12" y1="17" x2="12.01" y2="17"></line>
+            </svg>
+          </div>
+          <div>
+            <h2 style="margin:0; font-size:18px; color:var(--navy-900);">Confirm &amp; Run Analysis</h2>
+            <div style="font-size:13px; color:var(--ink-secondary); margin-top:2px;">UC Patient Cohort &bull; Claims
+              Warehouse</div>
+          </div>
+        </div>
+        <button id="close-modal-btn"
+          style="background:transparent; border:none; cursor:pointer; font-size:20px; color:var(--ink-muted);">&times;</button>
+      </div>
+
+      <div style="border-top:1px solid var(--border); padding-top:20px;">
+        <div style="font-weight:600; font-size:14px; margin-bottom:12px; color:var(--ink-primary);">Active Business
+          Rules (<span id="modal-rule-count">0</span>)</div>
+
+        <div style="border:1px solid var(--border); border-radius:8px; overflow-y:auto; max-height:300px;">
+          <table style="width:100%; border-collapse:collapse;">
+            <thead style="position:sticky; top:0; z-index:1;">
+              <tr>
+                <th
+                  style="text-align:left; padding:12px; font-size:13px; font-weight:600; color:var(--ink-primary); border-bottom:1px solid var(--border); background:#f9fafb;">
+                  Parameter</th>
+                <th
+                  style="text-align:left; padding:12px; font-size:13px; font-weight:600; color:var(--ink-primary); border-bottom:1px solid var(--border); background:#f9fafb;">
+                  Value</th>
+              </tr>
+            </thead>
+            <tbody id="modal-rule-tbody">
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div
+        style="display:flex; justify-content:flex-end; gap:12px; margin-top:24px; padding-top:24px; border-top:1px solid var(--border);">
+        <button id="cancel-modal-btn" class="btn btn-ghost" style="color:var(--ink-secondary);">Go Back</button>
+        <button id="confirm-modal-btn" class="btn"
+          style="background:#2e8555; color:#fff; display:flex; align-items:center; gap:6px;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="5 3 19 12 5 21 5 3"></polygon>
+          </svg>
+          Run Analysis
+        </button>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
