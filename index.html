@@ -2189,9 +2189,9 @@
           segments: [
             { label: "Stable Entyvio (IV/SC) patients — convenience-switch candidates", value: 170009, color: "#1baf7a" },
             { label: "New advanced-therapy starts likely to prefer an oral option", value: 69292, color: "#2a78d6" },
-            { label: "Injectable-fatigue switchers from other classes", value: 185821, color: "#eda100" }
+            { label: "Injectable-fatigue switchers from other classes", value: 129152, color: "#eda100" }
           ],
-          total: 425122
+          total: 368453
         }
       }
     };
@@ -2227,7 +2227,8 @@
       { id: cid(), category: "Route Classification", text: "Classify each advanced-therapy claim by administration route: Oral (Rinvoq, Xeljanz, Zeposia, Velsipity), Intravenous (Remicade, Entyvio-IV), or Subcutaneous (Humira, Simponi, Entyvio-SC, Stelara, Omvoh, Skyrizi)", active: true },
       { id: cid(), category: "Oral-Start Sequencing", text: "For each new oral advanced-therapy claim, classify as Advanced-Therapy Naive (no advanced-therapy claim in the 12 months prior) or Switched from Injectable (prior IV/SC advanced-therapy claim within 90 days)", active: true },
       { id: cid(), category: "Convenience-Switch Candidate", text: "Flag patients on a stable Entyvio (IV/SC) regimen for ≥ 6 months with no adverse-event-related claims as a convenience-switch candidate for an oral integrin option", active: true },
-      { id: cid(), category: "New-Start Oral Preference", text: "Estimate the share of new advanced-therapy starts likely to prefer an oral option, based on the observed quarterly growth trend in oral share of new starts", active: true }
+      { id: cid(), category: "New-Start Oral Preference", text: "Estimate the share of new advanced-therapy starts likely to prefer an oral option, based on the observed quarterly growth trend in oral share of new starts", active: true },
+      { id: cid(), category: "Injectable-Fatigue Switcher", text: "Flag patients switching from non-integrin injectable therapies (Anti-TNF, IL-12/23, IL-23) after ≥6 months of treatment as injectable-fatigue switchers for an oral option", active: true }
     ]);
 
     /* ============================================================
