@@ -1872,7 +1872,9 @@
       }
     }
   </style>
-</head><body>
+</head>
+
+<body>
 
   <!-- ============ LANDING ============ -->
   <section id="view-landing">
@@ -2890,7 +2892,7 @@
       const titleWrap = h("div");
       const title = h("div", "panel-title", "Cohort summary");
       title.style.marginBottom = "4px";
-      const sub = h("div", "panel-subtitle", "High-level view of the qualifying UC patient population, the attrition funnel, and key distributions.");
+      const sub = h("div", "panel-subtitle", "High-level view of the qualifying UC patient population, the funnel, and key distributions.");
       sub.style.marginBottom = "0";
       titleWrap.appendChild(title);
       titleWrap.appendChild(sub);
@@ -2920,7 +2922,7 @@
       ];
       wrap.appendChild(statTiles(stats));
 
-      wrap.appendChild(funnelChart({ title: "Patient attrition funnel", subtitle: "From the full claims population to the final analysis-ready cohort.", stages: d.funnel }));
+      wrap.appendChild(funnelChart({ title: "Patient funnel", subtitle: "From the full claims population to the final analysis-ready cohort.", stages: d.funnel }));
 
       const grid = h("div", "chart-grid-2");
       grid.appendChild(donutChart({ title: "Gender Distribution", data: d.gender, centerLabel: d.gender[0].value.toFixed(0) + "%", centerSub: d.gender[0].label }));
@@ -3701,4 +3703,5 @@
     </div>
   </div>
 </body>
+
 </html>
