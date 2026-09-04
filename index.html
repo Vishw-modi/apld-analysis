@@ -2189,9 +2189,9 @@
           segments: [
             { label: "Stable Entyvio (IV/SC) patients — convenience-switch candidates", value: 170009, color: "#1baf7a" },
             { label: "New advanced-therapy starts likely to prefer an oral option", value: 69292, color: "#2a78d6" },
-            { label: "Injectable-fatigue switchers from other classes", value: 129152, color: "#eda100" }
+            { label: "Injectable-fatigue switchers from other classes", value: 19102, color: "#eda100" }
           ],
-          total: 368453
+          total: 258403
         }
       }
     };
@@ -3468,94 +3468,34 @@
 
       wrap.appendChild(landscapeResultsBlock());
 
-      const tightened = STATE["tightened_" + key];
-      let cases = [];
-      if (!tightened) {
-        if (!STATE["edgeToggles_" + key]) {
-          STATE["edgeToggles_" + key] = { t1: true, t2: true, t3: true };
-        }
-        cases = [
-          { text: '<b>540 patients (2.4%)</b> have an Entyvio claim that changed from IV to SC formulation of the same drug — not a true route change, and could be miscounted as leaving the injectable route entirely.', rule: 'Treat Entyvio IV→SC formulation changes as a continuation within the injectable route, not a route switch', id: 't1' },
-          { text: '<b>410 patients (1.8%)</b> have overlapping oral and injectable advanced-therapy claims lasting &lt;14 days — likely a bridge/sample fill rather than true combination therapy or a route switch.', rule: 'Exclude overlapping oral + injectable fills lasting <14 days from combination-therapy and route-switch classification (bridge/sample fill)', id: 't2' },
-          { text: '<b>290 patients (1.3%)</b> have a single oral advanced-therapy claim with no subsequent refill — potentially a trial fill or data lag rather than a confirmed oral start.', rule: 'Require at least two claims for a new oral advanced therapy within 90 days to confirm an oral start', id: 't3' }
-        ];
+      const hero = h("div", "final-hero");
+      hero.style.marginTop = "24px";
+      hero.innerHTML = `<h3>What does the UC treatment landscape mean for Emvistegrast's positioning?</h3><p>Entyvio still leads the advanced-therapy market at roughly a quarter of active patients, but the market is already moving toward convenience: oral's share of new advanced-therapy starts has grown from <b>12% to 37%</b> since Q1-23 — nearly tripling in two and a half years, before an oral integrin option even exists. Within that shift, <b>61% of new oral starts</b> are patients actively switching off an injectable therapy, not just treatment-naive patients defaulting to a pill. Combining a stable Entyvio base ready to convert, new starts likely to prefer oral, and injectable-fatigue switchers from other classes, we estimate a realistic near-term opportunity of <b>${fmt(DATA.landscape.opportunity.total)} patients</b> for an oral integrin option like Emvistegrast.</p>`;
+      wrap.appendChild(hero);
 
-        const callout = h("div", "callout");
-        let html = '<div class="callout-head"><div class="callout-icon">!</div><b>A few edge cases worth a look</b></div>';
-        html += '<div style="display:flex; flex-direction:column; gap:16px; margin-bottom:16px;">';
-        cases.forEach(c => {
-          html += '<div style="display:flex; gap:16px; border-bottom:1px solid rgba(0,0,0,0.05); padding-bottom:12px;">' +
-            '<div style="flex:1; font-size:13px; line-height:1.5;">' + c.text + '</div>' +
-            '<div style="flex:1; background:rgba(255,255,255,0.6); padding:10px; border-radius:6px; border:1px solid rgba(0,0,0,0.05);">' +
-            '<div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:4px;">' +
-            '<b style="font-size:12px; color:var(--teal-700)">Enhancement</b>' +
-            '<div id="tgl-landscape-' + c.id + '" class="toggle' + (STATE["edgeToggles_" + key][c.id] ? ' on' : '') + '" style="cursor:pointer;"><div class="knob"></div></div>' +
-            '</div>' +
-            '<div style="font-size:12px; line-height:1.4;">' + c.rule + '</div>' +
-            '</div>' +
-            '</div>';
-        });
-        html += '</div>';
-        html += '<div class="btn-row">' +
-          '<button class="btn btn-tealsolid" id="btn-analysis-tighten">Apply selected tightening &amp; re-run</button>' +
-          '<button class="link-btn" id="btn-analysis-adjust">Adjust rules myself</button>' +
-          '<button class="link-btn" id="btn-analysis-keep">Keep as-is, continue</button>' +
-          '</div>';
-        callout.innerHTML = html;
-        wrap.appendChild(callout);
-      }
+      const cd = STATE.cohortRunNum === 2 ? DATA.cohortV2 : DATA.cohortV1;
+      const recap = h("div", "recap-grid");
+      recap.innerHTML =
+        '<div class="recap-card"><div class="rc-title">Cohort</div><div class="rc-value">' + fmt(cd.kpis.total) + '</div><div class="rc-sub">confirmed UC patients, Jan 2023–Dec 2025</div></div>' +
+        '<div class="recap-card"><div class="rc-title">Oral Share of New Starts</div><div class="rc-value">12% → 37%</div><div class="rc-sub">nearly tripled since Q1-23</div></div>' +
+        '<div class="recap-card"><div class="rc-title">Potential Market</div><div class="rc-value">' + fmt(DATA.landscape.opportunity.total) + '</div><div class="rc-sub">near-term opportunity for an oral integrin option</div></div>';
+      wrap.appendChild(recap);
 
       const nextCard = h("div", "card");
-      if (tightened) {
-        nextCard.innerHTML = '<div class="card-title">Analysis complete</div><div class="card-sub" style="margin-bottom:14px;">The treatment landscape view is ready. Generate a combined summary tying it back to Emvistegrast\'s positioning question?</div>';
-        const row = h("div", "btn-row");
-        const b = h("button", "btn btn-tealsolid", "Generate market understanding summary");
-        b.onclick = () => { userSay("Generate a combined summary."); showFinalSummary(); };
-        row.appendChild(b);
-        nextCard.appendChild(row);
-      } else {
-        nextCard.innerHTML = '<div class="card-title">Almost there</div><div class="card-sub" style="margin-bottom:0;">Review the edge cases above, then continue to the combined summary.</div>';
-      }
+      nextCard.style.marginTop = "20px";
+      nextCard.innerHTML = '<div class="card-title">Analysis complete</div><div class="card-sub" style="margin-bottom:14px;">The treatment landscape view is ready. Generate a combined summary tying it back to Emvistegrast\'s positioning question?</div>';
+      const row = h("div", "btn-row");
+      const b = h("button", "btn btn-tealsolid", "Generate market understanding summary");
+      b.onclick = () => { userSay("Generate a combined summary."); showFinalSummary(); };
+      row.appendChild(b);
+      nextCard.appendChild(row);
       wrap.appendChild(nextCard);
       renderPanel(wrap);
 
-      if (!tightened) {
-        cases.forEach(c => {
-          const el = document.getElementById("tgl-landscape-" + c.id);
-          el.onclick = () => {
-            STATE["edgeToggles_" + key][c.id] = !STATE["edgeToggles_" + key][c.id];
-            el.className = "toggle" + (STATE["edgeToggles_" + key][c.id] ? " on" : "");
-          };
-        });
-
-        document.getElementById("btn-analysis-tighten").onclick = () => {
-          userSay("Apply the selected tightening and re-run the " + ANALYSIS_META[key].label.toLowerCase() + ".");
-          applyTightenedRules(key);
-        };
-        document.getElementById("btn-analysis-adjust").onclick = () => {
-          STATE["tightened_" + key] = true;
-          const rules = syncEdgeTogglesToRules(key);
-          renderPanel(analysisRulesPanel(key, rules));
-          toast("Manual editing re-opened — adjust and confirm to re-run.");
-        };
-        document.getElementById("btn-analysis-keep").onclick = () => {
-          STATE["tightened_" + key] = true;
-          showAnalysisResults(key);
-        };
-
-        aiSay("Treatment landscape is done — see treatment share by drug, the oral vs. injectable shift, combination patterns, and the potential market sizing below. I found a few edge cases worth reviewing — see the callout on the bottom.", 1000).then(() => {
-          setChips([
-            { label: "Apply selected tightening & re-run", primary: true, onClick: () => { userSay("Apply the selected tightening and re-run."); applyTightenedRules(key); } },
-            { label: "Keep as-is, continue", muted: true, onClick: () => { STATE["tightened_" + key] = true; showAnalysisResults(key); } }
-          ]);
-          freeTextHandler = () => { userSay("Apply the selected tightening and re-run."); applyTightenedRules(key); };
-        });
-      } else {
-        aiSay("The tightened result set looks clean and ready for the combined summary.", 900).then(() => {
-          setChips([{ label: "Generate market understanding summary", primary: true, onClick: () => { userSay("Generate a combined summary."); showFinalSummary(); } }]);
-          freeTextHandler = () => showFinalSummary();
-        });
-      }
+      aiSay("Treatment landscape is done — see treatment share by drug, the oral vs. injectable shift, combination patterns, and the potential market sizing below.", 900).then(() => {
+        setChips([{ label: "Generate market understanding summary", primary: true, onClick: () => { userSay("Generate a combined summary."); showFinalSummary(); } }]);
+        freeTextHandler = () => { userSay("Generate a combined summary."); showFinalSummary(); };
+      });
     }
 
     /* ============================================================
@@ -3571,7 +3511,7 @@
       wrap.appendChild(h("div", "panel-subtitle", "A synthesized view across cohort and treatment-landscape findings — tied back to Emvistegrast's Phase 2 positioning question."));
 
       const hero = h("div", "final-hero");
-      hero.innerHTML = `<h3>What does the UC treatment landscape mean for Emvistegrast's positioning?</h3><p>Entyvio still leads the advanced-therapy market at roughly a quarter of active patients, but the market is already moving toward convenience: oral's share of new advanced-therapy starts has grown from <b>12% to 37%</b> since Q1-23 — nearly tripling in two and a half years, before an oral integrin option even exists. Within that shift, <b>39% of new oral starts</b> are patients actively switching off an injectable therapy, not just treatment-naive patients defaulting to a pill. Combining a stable Entyvio base ready to convert, new starts likely to prefer oral, and injectable-fatigue switchers from other classes, we estimate a realistic near-term opportunity of <b>${fmt(DATA.landscape.opportunity.total)} patients</b> for an oral integrin option like Emvistegrast.</p>`;
+      hero.innerHTML = `<h3>What does the UC treatment landscape mean for Emvistegrast's positioning?</h3><p>Entyvio still leads the advanced-therapy market at roughly a quarter of active patients, but the market is already moving toward convenience: oral's share of new advanced-therapy starts has grown from <b>12% to 37%</b> since Q1-23 — nearly tripling in two and a half years, before an oral integrin option even exists. Within that shift, <b>61% of new oral starts</b> are patients actively switching off an injectable therapy, not just treatment-naive patients defaulting to a pill. Combining a stable Entyvio base ready to convert, new starts likely to prefer oral, and injectable-fatigue switchers from other classes, we estimate a realistic near-term opportunity of <b>${fmt(DATA.landscape.opportunity.total)} patients</b> for an oral integrin option like Emvistegrast.</p>`;
       wrap.appendChild(hero);
 
       const recap = h("div", "recap-grid");
