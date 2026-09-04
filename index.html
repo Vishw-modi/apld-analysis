@@ -2181,8 +2181,8 @@
         ],
         oralSequencing: {
           newOralStarts: 69292,
-          naivePct: 61,
-          switchedPct: 39,
+          naivePct: 39,
+          switchedPct: 61,
           avgMonthsOnInjectableBeforeSwitch: 11.4
         },
         opportunity: {
@@ -2228,7 +2228,7 @@
       { id: cid(), category: "Oral-Start Sequencing", text: "For each new oral advanced-therapy claim, classify as Advanced-Therapy Naive (no advanced-therapy claim in the 12 months prior) or Switched from Injectable (prior IV/SC advanced-therapy claim within 90 days)", active: true },
       { id: cid(), category: "Convenience-Switch Candidate", text: "Flag patients on a stable Entyvio (IV/SC) regimen for ≥ 6 months with no adverse-event-related claims as a convenience-switch candidate for an oral integrin option", active: true },
       { id: cid(), category: "New-Start Oral Preference", text: "Estimate the share of new advanced-therapy starts likely to prefer an oral option, based on the observed quarterly growth trend in oral share of new starts", active: true },
-      { id: cid(), category: "Injectable-Fatigue Switcher", text: "Flag patients switching from non-integrin injectable therapies (Anti-TNF, IL-12/23, IL-23) after ≥6 months of treatment as injectable-fatigue switchers for an oral option", active: true }
+      { id: cid(), category: "Injectable-Fatigue Switcher", text: "Flag patients switching from injectable therapies (Anti-TNF, IL-12/23, IL-23) after ≥6 months of treatment as injectable-fatigue switchers for an oral option", active: true }
     ]);
 
     /* ============================================================
@@ -3152,6 +3152,9 @@
     async function startAnalysisFlow(key) {
       setChips([]); freeTextHandler = null;
       renderStepper(3);
+      delete STATE["tightened_" + key];
+      delete STATE["edgeToggles_" + key];
+      delete STATE["rules_" + key];
       const meta = ANALYSIS_META[key];
 
       await aiSay(meta.ackText, 900);
@@ -3166,12 +3169,20 @@
       wrap.appendChild(h("div", "panel-title", meta.label + " — business rules"));
       wrap.appendChild(h("div", "panel-subtitle", "How every advanced-therapy claim gets classified by drug, route, and combination status, and how we size the potential oral-integrin opportunity."));
 
+      const isTightened = STATE["tightened_" + key];
+      const onConfirmCallback = isTightened
+        ? (activeRules) => runAnalysis(key)
+        : (activeRules) => handleConfirmRulesAndPreview(activeRules);
+      const buttonLabel = isTightened
+        ? "Confirm rules & re-run analysis"
+        : "Confirm rules & preview on sample patients";
+
       wrap.appendChild(rulesEditorCard(
         "Suggested business rules — " + meta.label,
         "AI-suggested starting point for this analysis. Add, edit, or disable rules to match your definition.",
         rulesArr,
-        (activeRules) => handleConfirmRulesAndPreview(activeRules),
-        "Confirm rules & preview on sample patients",
+        onConfirmCallback,
+        buttonLabel,
         false
       ));
       return wrap;
@@ -3209,7 +3220,7 @@
 
       const containerCard = h("div", "card");
       containerCard.appendChild(h("div", "card-title", "Sample patients, classified by the rules above"));
-      containerCard.appendChild(h("div", "card-sub", "Three examples: an oral-naive start, an oral switch from an injectable, and a combination-therapy flag."));
+      containerCard.appendChild(h("div", "card-sub", "Two examples: an oral-naive start and an oral switch from an injectable."));
 
       const samplesList = h("div");
       samplesList.style.marginTop = "16px";
@@ -3295,47 +3306,6 @@
             <span><b>Oral Start — Switched from Injectable (Humira, SC)</b> — Rinvoq claim within 90 days of Humira's supply end, with no further Humira claim afterward.</span>
           </div>
         </div>
-
-        <!-- PT-20117 -->
-        <div style="border:1px solid var(--border); border-radius:10px; padding:18px 20px; margin-bottom:16px; background:#fff;">
-          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-            <div style="font-weight:700; font-size:15px; color:var(--navy-900); display:flex; align-items:center; gap:10px;">
-              PT-20117
-              <span style="background:#eda100; color:#fff; font-size:10px; font-weight:800; padding:2px 10px; border-radius:12px; letter-spacing:0.4px;">COMBINATION THERAPY</span>
-            </div>
-          </div>
-          <div style="font-size:12px; color:var(--ink-muted); margin-bottom:14px;">
-            Advanced therapy: <b style="color:var(--navy-900);">Stelara (SC), starting 2023-11-01, ongoing</b> &nbsp;&nbsp; Concurrent claim under evaluation: <b style="color:var(--navy-900);">Azathioprine, 2023-11-08 to present</b>
-          </div>
-          <table style="width:100%; border-collapse:collapse; font-size:12px; margin-bottom:12px;">
-            <thead>
-              <tr style="border-bottom:1px solid var(--border); text-align:left; color:var(--ink-muted); font-size:10.5px; font-weight:700; text-transform:uppercase; letter-spacing:0.4px;">
-                <th style="padding:6px 10px;">CLAIM EPISODE</th>
-                <th style="padding:6px 10px;">ROUTE</th>
-                <th style="padding:6px 10px;">START DATE</th>
-                <th style="padding:6px 10px;">END DATE</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td style="padding:10px; color:var(--ink-primary);">STELARA</td>
-                <td style="padding:10px; color:var(--ink-secondary);">Subcutaneous</td>
-                <td style="padding:10px; color:var(--ink-secondary);">2023-11-01</td>
-                <td style="padding:10px; font-weight:600; color:var(--navy-900);">Ongoing</td>
-              </tr>
-              <tr style="background:#fffbeb;">
-                <td style="padding:10px; font-weight:700; color:var(--navy-900); border-left:3px solid #eda100;">Azathioprine</td>
-                <td style="padding:10px; color:var(--ink-secondary);">Immunomodulator</td>
-                <td style="padding:10px; color:var(--ink-secondary);">2023-11-08</td>
-                <td style="padding:10px; font-weight:600; color:var(--navy-900);">Ongoing</td>
-              </tr>
-            </tbody>
-          </table>
-          <div style="border:1px solid #eda100; background:#fffbeb; border-radius:8px; padding:10px 14px; font-size:12.5px; color:#78350f; display:flex; align-items:center; gap:8px;">
-            <span style="background:#eda100; color:#fff; font-size:9.5px; font-weight:800; padding:2px 6px; border-radius:4px; flex-shrink:0;">FLAG</span>
-            <span><b>Combination Therapy</b> — Concurrent immunomodulator claim overlapping the advanced-therapy claim by more than 60 days, so this counts as combination therapy, not monotherapy.</span>
-          </div>
-        </div>
       `;
 
       containerCard.appendChild(samplesList);
@@ -3365,7 +3335,7 @@
         renderPanel(analysisRulesPanel("landscape", getAnalysisRules("landscape")));
       };
 
-      aiSay("All three look right: a clean oral-naive start, an injectable-to-oral switch, and a correctly flagged combination-therapy case. These are built from a sample of claims data to confirm the rules work as intended — if they look good to you, I'll run this same logic against the complete claims dataset.", 900);
+      aiSay("Both look right: a clean oral-naive start and an injectable-to-oral switch. These are built from a sample of claims data to confirm the rules work as intended — if they look good to you, I'll run this same logic against the complete claims dataset.", 900);
       setChips([
         { label: "Confirm & run on complete claims.", primary: true, onClick: () => { userSay("Confirm & run on complete claims."); runAnalysis("landscape"); } }
       ]);
@@ -3563,6 +3533,7 @@
           applyTightenedRules(key);
         };
         document.getElementById("btn-analysis-adjust").onclick = () => {
+          STATE["tightened_" + key] = true;
           const rules = syncEdgeTogglesToRules(key);
           renderPanel(analysisRulesPanel(key, rules));
           toast("Manual editing re-opened — adjust and confirm to re-run.");
