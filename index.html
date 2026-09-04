@@ -2019,7 +2019,7 @@
               real-world evidence criteria. Want to review them?</div>
           </div>
           <div class="mini-stats">
-            <div class="mini-stat"><b>37.0K</b><span>Cohort Patients</span></div>
+            <div class="mini-stat"><b>1.18M</b><span>Cohort Patients</span></div>
             <div class="mini-stat"><b>22.3K</b><span>Advanced-Tx Treated</span></div>
             <div class="mini-stat"><b>5.6K</b><span>Potential Market</span></div>
           </div>
@@ -2094,35 +2094,49 @@
     const DATA = {
       cohortV1: {
         label: "Initial Run",
-        kpis: { total: 40420, avgAge: 42.6, pctFemale: 47.8, avgFollowup: 14.5 },
+        kpis: { total: 1183269, avgAge: 57.1, pctFemale: 58.3, avgFollowup: 14.5 },
         funnel: [
-          { label: "Members with ≥1 UC diagnosis claim (ICD-10 K51.x)", value: 96400 },
-          { label: "≥2 qualifying diagnosis claims", value: 74820 },
-          { label: "Age ≥ 18 at index", value: 71150 },
-          { label: "Continuous enrollment met", value: 52930 },
-          { label: "Treatment evidence within 90 days", value: 44760 },
-          { label: "Final cohort (post-exclusions)", value: 40420 }
+          { label: "Members with ≥1 UC diagnosis claim (ICD-10 K51.x)", value: 2822047 },
+          { label: "≥2 qualifying diagnosis claims", value: 2190306 },
+          { label: "Age ≥ 18 at index", value: 2082872 },
+          { label: "Continuous enrollment met", value: 1549491 },
+          { label: "Treatment evidence within 90 days", value: 1310319 },
+          { label: "Final cohort (post-exclusions)", value: 1183269 }
         ],
-        age: [{ label: "18–34", value: 26 }, { label: "35–49", value: 24 }, { label: "50–64", value: 32 }, { label: "65+", value: 18 }],
-        gender: [{ label: "Female", value: 47.8 }, { label: "Male", value: 52.2 }],
-        payer: [{ label: "Commercial", value: 58 }, { label: "Medicare", value: 27 }, { label: "Medicaid", value: 15 }],
+        age: [
+          { label: "18–29", value: 5.3 },
+          { label: "30–39", value: 12.0 },
+          { label: "40–49", value: 13.3 },
+          { label: "50–59", value: 20.0 },
+          { label: "60–69", value: 20.0 },
+          { label: "70+", value: 29.3 }
+        ],
+        gender: [{ label: "Female", value: 58.3 }, { label: "Male", value: 41.7 }],
+        payer: [{ label: "Medicare", value: 58 }, { label: "Commercial", value: 27 }, { label: "Medicaid", value: 15 }],
         state: [{ label: "CA", value: 15 }, { label: "TX", value: 11 }, { label: "FL", value: 10 }, { label: "Other", value: 64 }],
         treatmentStage: [{ label: "Conventional therapy only", value: 46 }, { label: "Advanced therapy — naive start", value: 34 }, { label: "Advanced therapy — class switch", value: 14 }, { label: "Advanced therapy — restart", value: 6 }]
       },
       cohortV2: {
         label: "Refined Run",
-        kpis: { total: 36980, avgAge: 42.9, pctFemale: 47.3, avgFollowup: 14.8 },
+        kpis: { total: 1082565, avgAge: 57.4, pctFemale: 58.3, avgFollowup: 14.8 },
         funnel: [
-          { label: "Members with ≥1 UC diagnosis claim (ICD-10 K51.x)", value: 96400 },
-          { label: "≥2 claims, ≥30 days apart, different providers", value: 68110 },
-          { label: "Age ≥ 18 at index", value: 64860 },
-          { label: "Continuous enrollment met", value: 48230 },
-          { label: "Treatment evidence within 90 days", value: 40870 },
-          { label: "Final cohort (post-exclusions, incl. competing Crohn's dx)", value: 36980 }
+          { label: "Members with ≥1 UC diagnosis claim (ICD-10 K51.x)", value: 2822047 },
+          { label: "≥2 claims, ≥30 days apart, different providers", value: 1993876 },
+          { label: "Age ≥ 18 at index", value: 1898734 },
+          { label: "Continuous enrollment met", value: 1411802 },
+          { label: "Treatment evidence within 90 days", value: 1196443 },
+          { label: "Final cohort (post-exclusions, incl. competing Crohn's dx)", value: 1082565 }
         ],
-        age: [{ label: "18–34", value: 25 }, { label: "35–49", value: 24 }, { label: "50–64", value: 33 }, { label: "65+", value: 18 }],
-        gender: [{ label: "Female", value: 47.3 }, { label: "Male", value: 52.7 }],
-        payer: [{ label: "Commercial", value: 59 }, { label: "Medicare", value: 26 }, { label: "Medicaid", value: 15 }],
+        age: [
+          { label: "18–29", value: 5.3 },
+          { label: "30–39", value: 12.0 },
+          { label: "40–49", value: 13.3 },
+          { label: "50–59", value: 20.0 },
+          { label: "60–69", value: 20.0 },
+          { label: "70+", value: 29.3 }
+        ],
+        gender: [{ label: "Female", value: 58.3 }, { label: "Male", value: 41.7 }],
+        payer: [{ label: "Medicare", value: 59 }, { label: "Commercial", value: 26 }, { label: "Medicaid", value: 15 }],
         state: [{ label: "CA", value: 14 }, { label: "TX", value: 11 }, { label: "FL", value: 10 }, { label: "Other", value: 65 }],
         treatmentStage: [{ label: "Conventional therapy only", value: 45 }, { label: "Advanced therapy — naive start", value: 35 }, { label: "Advanced therapy — class switch", value: 14 }, { label: "Advanced therapy — restart", value: 6 }]
       },
@@ -2245,7 +2259,10 @@
     const STATE = { cohortRuleset: null, cohortRunNum: 0, completedAnalyses: [], businessAsked: false };
     function sleep(ms) { return new Promise(res => setTimeout(res, ms)); }
     function escapeHtml(s) { const d = document.createElement("div"); d.textContent = s; return d.innerHTML; }
-    function fmt(n) { return Math.round(n).toLocaleString("en-US"); }
+    function fmt(n) {
+      if (n >= 1000000) return (n / 1000000).toFixed(2) + "M";
+      return Math.round(n).toLocaleString("en-US");
+    }
     function pct(n, d) { return ((n / d) * 100).toFixed(1); }
 
     function toast(msg) {
@@ -2926,7 +2943,7 @@
           '<div style="display:flex; flex-direction:column; gap:16px; margin-bottom:16px;">' +
           '<div style="display:flex; gap:16px; border-bottom:1px solid rgba(0,0,0,0.05); padding-bottom:12px;">' +
           '<div style="flex:1; font-size:13px; line-height:1.5;">' +
-          '<b>2,220 patients (5.5%)</b> have their two qualifying diagnosis claims &lt;14 days apart from the same provider visit — often a coding duplicate rather than a confirmed diagnosis.' +
+          '<b>65,080 patients (5.5%)</b> have their two qualifying diagnosis claims &lt;14 days apart from the same provider visit — often a coding duplicate rather than a confirmed diagnosis.' +
           '</div>' +
           '<div style="flex:1; background:rgba(255,255,255,0.6); padding:10px; border-radius:6px; border:1px solid rgba(0,0,0,0.05);">' +
           '<div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:4px;">' +
@@ -2938,7 +2955,7 @@
           '</div>' +
           '<div style="display:flex; gap:16px; border-bottom:1px solid rgba(0,0,0,0.05); padding-bottom:12px;">' +
           '<div style="flex:1; font-size:13px; line-height:1.5;">' +
-          '<b>1,290 patients (3.2%)</b> carry a co-occurring Crohn\'s disease diagnosis (ICD-10 K50.x) within 90 days of index — a common source of indeterminate-colitis miscoding.' +
+          '<b>37,865 patients (3.2%)</b> carry a co-occurring Crohn\'s disease diagnosis (ICD-10 K50.x) within 90 days of index — a common source of indeterminate-colitis miscoding.' +
           '</div>' +
           '<div style="flex:1; background:rgba(255,255,255,0.6); padding:10px; border-radius:6px; border:1px solid rgba(0,0,0,0.05);">' +
           '<div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:4px;">' +
@@ -2949,7 +2966,7 @@
           '</div>' +
           '</div>' +
           '<div style="font-size:13px; line-height:1.5;">' +
-          '<b>770 patients (1.9%)</b> show a &gt;180 day enrollment gap immediately around index — not clearly actionable, so we\'d leave the enrollment rule as-is.' +
+          '<b>22,482 patients (1.9%)</b> show a &gt;180 day enrollment gap immediately around index — not clearly actionable, so we\'d leave the enrollment rule as-is.' +
           '</div>' +
           '</div>' +
           '<div class="btn-row">' +
@@ -2962,7 +2979,7 @@
         const callout = h("div", "callout teal");
         callout.innerHTML =
           '<div class="callout-head"><div class="callout-icon">✓</div><b>This looks like a clean, analysis-ready cohort</b></div>' +
-          '<div style="font-size:13px;color:var(--ink-secondary);line-height:1.6;margin-bottom:14px;">Tightening the diagnosis spacing/provider rule and excluding competing Crohn\'s diagnoses removed <b>3,440 patients (‑8.5%)</b> of likely rule-outs and miscoded records, without materially shifting the demographic mix.</div>' +
+          '<div style="font-size:13px;color:var(--ink-secondary);line-height:1.6;margin-bottom:14px;">Tightening the diagnosis spacing/provider rule and excluding competing Crohn\'s diagnoses removed <b>100,704 patients (‑8.5%)</b> of likely rule-outs and miscoded records, without materially shifting the demographic mix.</div>' +
           '<div class="btn-row">' +
           '<button class="btn btn-tealsolid" id="btn-accept-cohort">Accept this cohort & continue</button>' +
           '</div>';
