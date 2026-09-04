@@ -1799,7 +1799,7 @@
       font-size: 13.5px;
       line-height: 1.6;
       color: rgba(255, 255, 255, 0.88);
-      max-width: 820px;
+      max-width: none;
     }
 
     .recap-grid {
@@ -2226,7 +2226,7 @@
       { id: cid(), category: "Market Basket", text: "Advanced UC therapies considered: Humira, Remicade, Simponi (Anti-TNF), Entyvio-IV, Entyvio-SC (Anti-integrin), Stelara-SC (IL-12/23), Omvoh-SC, Skyrizi-SC (IL-23), Rinvoq, Xeljanz (JAK), Zeposia, Velsipity (S1P)", active: true },
       { id: cid(), category: "Route Classification", text: "Classify each advanced-therapy claim by administration route: Oral (Rinvoq, Xeljanz, Zeposia, Velsipity), Intravenous (Remicade, Entyvio-IV), or Subcutaneous (Humira, Simponi, Entyvio-SC, Stelara, Omvoh, Skyrizi)", active: true },
       { id: cid(), category: "Oral-Start Sequencing", text: "For each new oral advanced-therapy claim, classify as Advanced-Therapy Naive (no advanced-therapy claim in the 12 months prior) or Switched from Injectable (prior IV/SC advanced-therapy claim within 90 days)", active: true },
-      { id: cid(), category: "Convenience-Switch Candidate", text: "Flag patients on a stable Entyvio (IV/SC) regimen for ≥ 6 months with no adverse-event-related claims as a convenience-switch candidate for an oral integrin option", active: true },
+      { id: cid(), category: "Convenience-Switch Candidate", text: "Flag patients on a stable Entyvio (IV/SC) regimen for ≥ 6 months with no adverse-event-related claims as a convenience-switch candidate for an oral option", active: true },
       { id: cid(), category: "New-Start Oral Preference", text: "Estimate the share of new advanced-therapy starts likely to prefer an oral option, based on the observed quarterly growth trend in oral share of new starts", active: true },
       { id: cid(), category: "Injectable-Fatigue Switcher", text: "Flag patients switching from injectable therapies (Anti-TNF, IL-12/23, IL-23) after ≥6 months of treatment as injectable-fatigue switchers for an oral option", active: true }
     ]);
@@ -3478,9 +3478,10 @@
       recap.innerHTML =
         '<div class="recap-card"><div class="rc-title">Cohort</div><div class="rc-value">' + fmt(cd.kpis.total) + '</div><div class="rc-sub">confirmed UC patients, Jan 2023–Dec 2025</div></div>' +
         '<div class="recap-card"><div class="rc-title">Oral Share of New Starts</div><div class="rc-value">12% → 37%</div><div class="rc-sub">nearly tripled since Q1-23</div></div>' +
-        '<div class="recap-card"><div class="rc-title">Potential Market</div><div class="rc-value">' + fmt(DATA.landscape.opportunity.total) + '</div><div class="rc-sub">near-term opportunity for an oral integrin option</div></div>';
+        '<div class="recap-card"><div class="rc-title">Potential Market</div><div class="rc-value">' + fmt(DATA.landscape.opportunity.total) + '</div><div class="rc-sub">near-term opportunity for an oral option</div></div>';
       wrap.appendChild(recap);
 
+      /* Temporarily hidden per team request (code preserved for re-enabling anytime)
       const nextCard = h("div", "card");
       nextCard.style.marginTop = "20px";
       nextCard.innerHTML = '<div class="card-title">Analysis complete</div><div class="card-sub" style="margin-bottom:14px;">The treatment landscape view is ready. Generate a combined summary tying it back to Emvistegrast\'s positioning question?</div>';
@@ -3490,6 +3491,7 @@
       row.appendChild(b);
       nextCard.appendChild(row);
       wrap.appendChild(nextCard);
+      */
       renderPanel(wrap);
 
       aiSay("Treatment landscape is done — see treatment share by drug, the oral vs. injectable shift, combination patterns, and the potential market sizing below.", 900).then(() => {
@@ -3518,7 +3520,7 @@
       recap.innerHTML =
         '<div class="recap-card"><div class="rc-title">Cohort</div><div class="rc-value">' + fmt(DATA.cohortV2.kpis.total) + '</div><div class="rc-sub">confirmed UC patients, Jan 2023–Dec 2025</div></div>' +
         '<div class="recap-card"><div class="rc-title">Oral Share of New Starts</div><div class="rc-value">12% → 37%</div><div class="rc-sub">nearly tripled since Q1-23</div></div>' +
-        '<div class="recap-card"><div class="rc-title">Potential Market</div><div class="rc-value">' + fmt(DATA.landscape.opportunity.total) + '</div><div class="rc-sub">near-term opportunity for an oral integrin option</div></div>';
+        '<div class="recap-card"><div class="rc-title">Potential Market</div><div class="rc-value">' + fmt(DATA.landscape.opportunity.total) + '</div><div class="rc-sub">near-term opportunity for an oral option</div></div>';
       wrap.appendChild(recap);
 
       const cd = STATE.cohortRunNum === 2 ? DATA.cohortV2 : DATA.cohortV1;
